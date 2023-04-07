@@ -55,7 +55,7 @@ module.exports = {
                             .setDescription(messages.size !== 0 ? (chance > 5 ? `${ok[Math.floor(Math.random() * ok.length)]}, ${messages.size} ${messages.size > 1 ? 'messages have' : 'message has'} been deleted!` : 'k.') : nomsg[Math.floor(Math.random() * nomsg.length)]),
                     ],
                 }).catch(() => { return; });
-                setTimeout(async () => { await interaction.deleteReply().catch(() => { return; }); }, 1500);
+                setTimeout(async () => { await interaction.deleteReply().catch(() => { return; }); }, 2000);
             })
             .catch(error => console.log(error));
     },

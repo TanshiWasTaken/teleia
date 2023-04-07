@@ -17,11 +17,7 @@ module.exports = {
             }
         }
         (async () => {
-            try {
-                console.log('Started refreshing application (/) commands.');
-                await client.application.commands.set(client.commands.map(c => c.data.toJSON()));
-                console.log('Successfully reloaded application (/) commands.');
-            }
+            try { await client.application.commands.set(client.commands.map(c => c.data.toJSON())); }
             catch (error) { console.error(error); }
         })();
     },
