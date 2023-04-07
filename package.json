@@ -1,7 +1,7 @@
 {
   "name": "semicolon",
   "version": "1.0.0",
-  "description": "",
+  "description": "the semicolon discord server bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/TanshiWasTaken/semicolon.git"
   },
-  "author": "",
+  "author": "Tanshi#0699",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TanshiWasTaken/semicolon/issues"
