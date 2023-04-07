@@ -1,5 +1,5 @@
-require("dotenv/config");
-const { Client, IntentsBitField } = require("discord.js");
+require('dotenv/config');
+const { Client, IntentsBitField } = require('discord.js');
 const client = new Client({
 	intents: [
 		IntentsBitField.Flags.AutoModerationConfiguration,
@@ -20,10 +20,10 @@ const client = new Client({
 		IntentsBitField.Flags.GuildWebhooks,
 		IntentsBitField.Flags.Guilds,
 		IntentsBitField.Flags.MessageContent,
-	]
+	],
 });
 
-client.on("ready", () => {
+client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
