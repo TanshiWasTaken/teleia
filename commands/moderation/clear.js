@@ -24,7 +24,6 @@ module.exports = {
             'shrug',
             'maybe if u ask me reeeeeeeeally nicely... /s',
         ];
-
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) return interaction.reply({ content: `${noperms[Math.floor(Math.random() * noperms.length)]}` });
         const amount = interaction.options.getInteger('amount');
         interaction.channel.bulkDelete(amount)

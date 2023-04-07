@@ -1,6 +1,6 @@
 require('dotenv/config');
 const [fs, path] = [require('node:fs'), require('node:path')];
-const { Client, Collection, Events, IntentsBitField, Partials } = require('discord.js');
+const { Client, Collection, IntentsBitField, Partials } = require('discord.js');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.AutoModerationConfiguration,
@@ -35,6 +35,7 @@ const client = new Client({
 
 client.commands = new Collection();
 client.events = new Collection();
+client.cooldowns = new Collection();
 
 const eventsPath = path.join(__dirname, 'events');
 const eventSubFolders = fs.readdirSync(eventsPath);
@@ -48,9 +49,5 @@ for (let i = 0; i < eventSubFolders.length; i++) {
         else { client.on(event.name, (...args) => event.execute(...args)); }
     }
 }
-
-client.once(Events.ClientReady, c => {
-    console.log(`Logged in as ${c.user.tag}!`);
-});
 
 client.login(process.env.TOKEN);

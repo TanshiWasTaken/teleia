@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { Events, Collection } = require('discord.js');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -7,7 +7,23 @@ module.exports = {
         if (!interaction.isChatInputCommand()) return;
         const command = interaction.client.commands.get(interaction.commandName);
         if (!command) return;
-        try {await command.execute(interaction); }
+        const cooldowns = interaction.client.cooldowns;
+        if (!cooldowns.has(command.data.name) && !command.cooldowns) cooldowns.set(command.data.name, new Collection());
+        const [now, timestamps, cooldownAmonunt] = [Date.now(), cooldowns.get(command.data.name), command.cooldown * 1000];
+        if (timestamps.has(interaction.user.id)) {
+            const expirationTime = timestamps.get(interaction.user.id) + cooldownAmonunt;
+            if (now < expirationTime) {
+                const expiredTimestamp = Math.round(expirationTime / 1000);
+                return await interaction.reply({
+                    content: `you can use the \`${command.data.name}\` command <t:${expiredTimestamp}:R>`,
+                    ephemeral: true,
+                });
+            }
+        }
+        timestamps.set(interaction.user.id, now);
+        setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmonunt);
+        // PUT THE COOLDOWNS IN A DATABASE!!!!
+        try { await command.execute(interaction); }
         catch (error) {
             const trylater = [
                 'this command is faulty',
