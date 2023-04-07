@@ -51,7 +51,7 @@ module.exports = {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(messages.size !== 0 ? interaction.guild.members.cache.find(m => m.id == process.env.CLIENT_ID).displayHexColor : `#${process.env.WARNING_COLOUR}`)
+                            .setColor(messages.size !== 0 ? `#${process.env.COLOUR}` : `#${process.env.WARNING_COLOUR}`)
                             .setDescription(messages.size !== 0 ? (chance > 5 ? `${ok[Math.floor(Math.random() * ok.length)]}, ${messages.size} ${messages.size > 1 ? 'messages have' : 'message has'} been deleted!` : 'k.') : nomsg[Math.floor(Math.random() * nomsg.length)]),
                     ],
                 }).catch(() => { return; });
