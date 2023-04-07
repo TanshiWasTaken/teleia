@@ -5,6 +5,6 @@ module.exports = {
     once: true,
     execute(client) {
         console.log(`${client.user.tag} is up`);
-        client.user.setActivity('words bounce', { type: ActivityType.Watching });
+        client.user.setActivity('pages turn', { type: ActivityType.Watching });
     },
 };
