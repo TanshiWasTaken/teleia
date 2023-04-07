@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/TanshiWasTaken/semicolon#readme",
   "dependencies": {
+    "@discordjs/rest": "^1.7.0",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3"
   },
