@@ -1,5 +1,5 @@
 require('dotenv/config');
-const { Client, IntentsBitField } = require('discord.js');
+const { Client, Events, IntentsBitField } = require('discord.js');
 const client = new Client({
 	intents: [
 		IntentsBitField.Flags.AutoModerationConfiguration,
@@ -23,8 +23,8 @@ const client = new Client({
 	],
 });
 
-client.on('ready', () => {
-	console.log(`Logged in as ${client.user.tag}!`);
+client.once(Events.ClientReady, c => {
+	console.log(`Logged in as ${c.user.tag}!`);
 });
 
 client.login(process.env.TOKEN);
