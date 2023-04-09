@@ -1,6 +1,7 @@
 require('dotenv/config');
 const [fs, path] = [require('node:fs'), require('node:path')];
 const { Client, Collection, IntentsBitField, Partials } = require('discord.js');
+const mongoose = require('mongoose');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.AutoModerationConfiguration,
@@ -49,5 +50,12 @@ for (let i = 0; i < eventSubFolders.length; i++) {
         else { client.on(event.name, (...args) => event.execute(...args)); }
     }
 }
+
+mongoose.set('strictQuery', true);
+(async () => {
+    await mongoose.connect(process.env.MONGO_URI).catch(async (err) => {
+        return await mongoose.disconnect().then(console.log(`disconnected from mongodb\n${err}`));
+    });
+})();
 
 client.login(process.env.TOKEN);
