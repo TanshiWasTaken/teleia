@@ -28,7 +28,6 @@ module.exports = {
                 ),
         ),
     async execute(interaction) {
-
         switch (interaction.options.getSubcommand()) {
         case 'create': {
             const embed = new EmbedBuilder()
@@ -46,9 +45,9 @@ module.exports = {
                 });
                 const filter = m => m.author.id === interaction.user.id;
                 await interaction.channel.awaitMessages({ filter, max: 1 })
-                    .then(collected => {
-                        collected.first().delete();
-                        interaction.editReply({
+                    .then(async (collected) => {
+                        await collected.first().delete();
+                        await interaction.editReply({
                             embeds: [
                                 embed.setDescription(collected.first().content),
                                 promptEmbed.setDescription('send what you want the `thumbnail` to be'),
@@ -56,9 +55,9 @@ module.exports = {
                         });
                     });
                 await interaction.channel.awaitMessages({ filter, max: 1 })
-                    .then(collected => {
-                        collected.first().delete();
-                        interaction.editReply({
+                    .then(async (collected) => {
+                        await collected.first().delete();
+                        await interaction.editReply({
                             embeds: [
                                 embed.setThumbnail(collected.first().content),
                                 promptEmbed.setDescription('send what you want the `image` to be'),
@@ -66,8 +65,8 @@ module.exports = {
                         });
                     });
                 await interaction.channel.awaitMessages({ filter, max: 1 })
-                    .then(collected => {
-                        collected.first().delete();
+                    .then(async (collected) => {
+                        await collected.first().delete();
                         embed.setImage(collected.first().content);
                     });
             }
