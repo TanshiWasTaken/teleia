@@ -1,61 +1,46 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const mongoose = require('mongoose');
 const Embed = require('../../schemas/embed');
 const embed = new EmbedBuilder()
     .setColor(process.env.COLOUR);
 async function description(interaction) {
-    const edit_description = new ModalBuilder()
-        .setCustomId('edit_description')
-        .setTitle('Edit Description')
-        .addComponents(
-            new ActionRowBuilder()
-                .addComponents(
-                    new TextInputBuilder()
-                        .setCustomId('description')
-                        .setLabel('Description')
-                        .setPlaceholder('Content of the embed')
-                        .setStyle(TextInputStyle.Paragraph)
-                        .setRequired(true),
-                ),
-        );
-    await interaction.showModal(edit_description);
-    await interaction.client.on('interactionCreate', async i => {
-        if (!i.isModalSubmit()) return;
-        switch (i.customId) {
-        case 'edit_description': {
-            embed.setDescription(i.fields.getTextInputValue('description'));
-        }
-        }
-    });
-    await interaction.awaitModalSubmit({ filter: i => i.customId === 'edit_description' && i.user.id === interaction.user.id, time: 2_147_483_647 })
-        .then(async i => {
-            await i.deferReply({ ephemeral: true }).then(await i.deleteReply());
-            // ^ or i.reply({ content: 'description changed' });
-            embed.setDescription(await i.fields.getTextInputValue('description'));
+    await interaction.reply({ content: 'send a description below. type `cancel` to cancel the edit', ephemeral: true });
+    await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
+        .then(async collected => {
+            if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
+            await collected.first().delete().catch(() => { return; });
+            await interaction.deleteReply();
+            embed.setDescription(collected.first().content);
         });
 }
 async function image(interaction) {
-    await interaction.reply({ content: 'send an image or a link to one below.', ephemeral: true });
+    await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the image or type `cancel` to cancel the edit.', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply(); return embed.setImage(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setImage(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setImage(regex[0]); }
             else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.channel.send({ content: 'videos, audios or anything else other than an image or gif cannot be used as an image.', ephemeral: true }); }
-            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found.', ephemeral: true }); }
-            await collected.first().delete();
+            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found', ephemeral: true }); }
+            await collected.first().delete().catch(() => { return; });
+            await interaction.deleteReply();
         });
 }
 async function thumbnail(interaction) {
-    await interaction.reply({ content: 'send an image or a link to one below.', ephemeral: true });
+    await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the thumbnail or type `cancel` to cancel the edit', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply(); return embed.setThumbnail(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setThumbnail(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setThumbnail(regex[0]); }
             else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.channel.send({ content: 'videos, audios or anything else other than an image or gif cannot be used as a thumbnail.', ephemeral: true }); }
-            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found.', ephemeral: true }); }
-            await collected.first().delete();
+            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found', ephemeral: true }); }
+            await collected.first().delete().catch(() => { return; });
+            await interaction.deleteReply();
         });
 }
 async function update_embed(interaction) {
@@ -63,22 +48,27 @@ async function update_embed(interaction) {
         embeds: [embed],
     });
 }
-async function edit_select_callback(interaction, i) {
-    switch (i.values[0]) {
-    case 'description': {
-        await description(i);
+async function select_callback(interaction, i) {
+    switch (interaction.options.getSubcommand()) {
+    default: {
+        switch (i.values[0]) {
+        case 'description': {
+            await description(i);
+            break;
+        }
+        case 'image': {
+            await image(i);
+            break;
+        }
+        case 'thumbnail': {
+            await thumbnail(i);
+            break;
+        }
+        }
+        await update_embed(interaction);
         break;
     }
-    case 'image': {
-        await image(i);
-        break;
     }
-    case 'thumbnail': {
-        await thumbnail(i);
-        break;
-    }
-    }
-    await update_embed(interaction);
 }
 async function button_callback(interaction, i, editEmbed) {
     switch (interaction.options.getSubcommand()) {
@@ -98,6 +88,8 @@ async function button_callback(interaction, i, editEmbed) {
                 image: embed.data?.image?.url,
             });
             await newEmbed.save();
+            embed.setThumbnail();
+            embed.setImage();
             break;
         }
         }
@@ -115,6 +107,8 @@ async function button_callback(interaction, i, editEmbed) {
             editEmbed.thumbnail = embed.data?.thumbnail?.url;
             editEmbed.image = embed.data?.image?.url;
             await editEmbed.save();
+            embed.setThumbnail();
+            embed.setImage();
             break;
         }
         }
@@ -124,11 +118,10 @@ async function button_callback(interaction, i, editEmbed) {
 async function button_pages(interaction, pages, time = 60000) {
     // await interaction.deferReply();
     const embeds = new EmbedBuilder()
-        .setTitle('Embeds')
         .setColor(process.env.COLOUR);
     if (pages.length === 1) {
         const page = await interaction.reply({
-            embeds: [embeds.setDescription(pages[0])],
+            embeds: [embeds.setDescription(`⸝⸝ ★ __***\`EMBEDS\`***__ ***!*** . . .\n\n> ・${pages[0]}`)],
             components: [],
             fetchReply: true,
         });
@@ -152,13 +145,11 @@ async function button_pages(interaction, pages, time = 60000) {
         .setCustomId('last')
         .setEmoji('⏭️')
         .setStyle(ButtonStyle.Secondary);
-
     const buttonRow = new ActionRowBuilder()
         .addComponents(home, prev, next, last);
     let index = 0;
-
     const currentPage = await interaction.reply({
-        embeds: [embeds.setDescription(pages[index]).setFooter({ text: `Page ${index + 1} / ${pages.length}` })],
+        embeds: [embeds.setDescription(`⸝⸝ ★ __***\`EMBEDS\`***__ ***!*** . . .\n\n> ・${pages[index]}`).setFooter({ text: `Page ${index + 1} / ${pages.length}` })],
         components: [buttonRow],
         fetchReply: true,
     });
@@ -204,10 +195,10 @@ async function button_pages(interaction, pages, time = 60000) {
         }
         }
         await currentPage.edit({
-            embeds: [embeds.setDescription(pages[index]).setFooter({ text: `Page ${index + 1} / ${pages.length}` })],
+            embeds: [embeds.setDescription(`⸝⸝ ★ __***\`EMBEDS\`***__ ***!*** . . .\n\n> ・${pages[index]}`).setFooter({ text: `Page ${index + 1} / ${pages.length}` })],
             components: [buttonRow],
         });
-        collector.resetTimer();
+        await collector.resetTimer();
     });
     collector.on('end', async () => {
         await currentPage.edit({
@@ -225,7 +216,8 @@ const select = new ActionRowBuilder()
                 new StringSelectMenuOptionBuilder()
                     .setLabel('Description')
                     .setValue('description')
-                    .setDescription('Edit the content of the embed'),
+                    .setDescription('Edit the content of the embed')
+                    .setEmoji('📝'),
                 new StringSelectMenuOptionBuilder()
                     .setLabel('Image')
                     .setValue('image')
@@ -325,7 +317,6 @@ module.exports = {
         switch (interaction.options.getSubcommand()) {
         case 'create': {
             if (await Embed.findOne({ name: interaction.options.getString('name') })) return await interaction.reply({ embeds: [embed.setDescription(`An embed with the name \`${interaction.options.getString('name')}\` already exists`)] });
-            interaction.options.getString('content') ? embed.setDescription(interaction.options.getString('content')) : 0;
             interaction.options.getAttachment('thumbnail')?.attachment ? embed.setThumbnail(interaction.options.getAttachment('thumbnail')?.attachment) : 0;
             interaction.options.getAttachment('image')?.attachment ? embed.setImage(interaction.options.getAttachment('image')?.attachment) : 0;
             await interaction.reply({
@@ -337,7 +328,7 @@ module.exports = {
 
             collector.on('collect', async i => {
                 if (i.isStringSelectMenu()) {
-                    await edit_select_callback(interaction, i);
+                    await select_callback(interaction, i);
                 }
                 else if (i.isButton()) {
                     await collector.stop();
@@ -348,7 +339,7 @@ module.exports = {
         }
         case 'list': {
             const embeds = await Embed.find();
-            embeds.length !== 0 ? await button_pages(interaction, Array.from({ length: Math.ceil(embeds.length / 5) }, (_, i) => embeds.slice(i * 5, i * 5 + 5).map(e => e.name).join('\n'))) : await interaction.reply({ embeds: [embed.setDescription('No embeds found')] });
+            embeds.length !== 0 ? await button_pages(interaction, Array.from({ length: Math.ceil(embeds.length / 5) }, (_, i) => embeds.slice(i * 5, i * 5 + 5).map(e => e.name).join('\n> ・'))) : await interaction.reply({ embeds: [embed.setDescription('No embeds found')] });
             break;
         }
         case 'delete': {
@@ -357,6 +348,47 @@ module.exports = {
             break;
         }
         case 'send': {
+            if (interaction.options.getString('name') == 'info') {
+                const infoSelect = new ActionRowBuilder()
+                    .addComponents(
+                        new StringSelectMenuBuilder()
+                            .setCustomId('infoEmbeds')
+                            .setPlaceholder('Select an info embed to view')
+                            .addOptions(
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('About us')
+                                    .setValue('about_us')
+                                    .setDescription('basic information about the server')
+                                    .setEmoji('ℹ️'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Strike system')
+                                    .setValue('strike_system')
+                                    .setDescription('information on how the strike system works')
+                                    .setEmoji('❌'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Server rewards')
+                                    .setValue('server_rewards')
+                                    .setDescription('information about server rewards')
+                                    .setEmoji('🏆'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Server map')
+                                    .setValue('server_map')
+                                    .setDescription('a map of the server')
+                                    .setEmoji('🗺️'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Partners and affiliates')
+                                    .setValue('p&a')
+                                    .setDescription('information about our partners and affiliates')
+                                    .setEmoji('🤝'),
+                            ),
+                    );
+                const infoEmbed = new EmbedBuilder()
+                    .setColor(process.env.COLOUR)
+                    .setDescription(`⸝⸝ ★ __***\`INFO\`***__ ***!*** . . .\n
+✰ \`O1\` — **__find out more__ *!***
+> click the drop down menu below to select a topic to view information on`);
+                return await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply(), await interaction.channel.send({ embeds: [infoEmbed], components: [infoSelect] }));
+            }
             const viewEmbed = await Embed.findOne({ name: interaction.options.getString('name') });
             if (!viewEmbed) return await interaction.reply({ embeds: [embed.setDescription(`Embed \`${interaction.options.getString('name')}\` not found`)] });
             const sendViewEmbed = new EmbedBuilder()
@@ -369,6 +401,8 @@ module.exports = {
         }
         case 'edit': {
             const editEmbed = await Embed.findOne({ name: interaction.options.getString('name') });
+            editEmbed.thumbnail ? embed.setThumbnail(editEmbed.thumbnail) : 0;
+            editEmbed.image ? embed.setImage(editEmbed.image) : 0;
             if (!editEmbed) return await interaction.reply({ embeds: [embed.setDescription(`Embed \`${interaction.options.getString('name')}\` not found`)] });
             await interaction.reply({
                 embeds: [embed.setDescription(editEmbed.content)],
@@ -376,10 +410,9 @@ module.exports = {
             });
             const filter = i => i.user.id === interaction.user.id;
             const collector = interaction.channel.createMessageComponentCollector({ filter });
-
             collector.on('collect', async i => {
                 if (i.isStringSelectMenu()) {
-                    await edit_select_callback(interaction, i);
+                    await select_callback(interaction, i);
                 }
                 else if (i.isButton()) {
                     await collector.stop();
