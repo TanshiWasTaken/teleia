@@ -48,12 +48,12 @@
 				"max": 4
 			}
 		],
-		"max-statements-per-line": [
+		/* "max-statements-per-line": [
 			"error",
 			{
 				"max": 3
 			}
-		],
+		], */
 		"no-console": "off",
 		"no-empty-function": "error",
 		"no-floating-decimal": "error",
