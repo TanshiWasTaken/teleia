@@ -111,6 +111,11 @@ Teleia tracks and logs all server events, including user actions, moderation act
 
 ---
   
+#### 7. Leveling system
+Teleia's leveling system has its own designated database collection. It will keep track of the amount of messages a member has sent in the server in order to assign them a level. Users are able to reach level milestones, which when they do, they're rewarded with a prize. There is a leaderboard specific for levels which ranks users based on their level.
+  
+---
+  
 </details>
 
 ### 4. Economy
