@@ -23,29 +23,49 @@ grc. **άνω τελεία**[^1] /ˈa·no te·ˈli·a/ (n. f)
 Teleia uses customisable artificial intelligence to automatically detect and block inappropriate content such as spam, NSFW content, hate speech, and more. The AI can be configured to suit the needs of the server and to block specific types of content.
 
 ---
+
 #### 2. Tweakable AI moderation for censorship
 Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics, words used in certain contexts, warn users of a loud video/audio file as soon as it was sent etc.
 
 ---
+
 #### 3. Intuitive and user-friendly commands for staff
 Teleia provides intuitive and user-friendly commands for staff members to help them manage the server more efficiently without giving them any headaches or dread in doing so, thanks to the ease of use of its moderation commands.
 
 ---
+
 #### 4. Strike system integration with designated database
 Teleia includes a strike system that allows staff members to track user behaviour, issue warnings and pardon/penalise users with strikes accordingly. The strikes are recorded in a designated database collection, allowing staff members to easily access and review user history, while also providing for an easy method of storing this information.
 
 ---
+
 #### 5. Automatic moderation
 Teleia can also perform moderative actions based on user behaviour. For example, if a user receives a certain number of strikes, Teleia can then penalise the user according to the amount of strikes the user has. This feature helps to reduce the workload of staff members and ensures rule violations are dealt with consistently and constantly.
 </details>
 
 <details>
 <summary>Teleia offers accommodation features to make users feel welcome and prevent them from getting overwhelemed.</summary>
-2. Accomodation
-   - Welcome messages
-   - Intuitive and user-friendly verification system
-   - Support for self-assignable roles
-   - Birthday database for remembering people's birthdays
+
+#### 1. Welcome messages
+Teleia will send a message welcoming each new member who joins the server. This message includes a greeting, general guide on how to get set-up in the server, and links to important resources. Offering a warm welcome can help create a friendly and inviting atmoshpere, encouragin new members to engage with the community.
+
+---
+
+#### 2. Verification system
+Teleia's verification system is a multi-step automated process with manual approval by staff members designated to prevent spam and protect the community from unwanted or malicious users. When new users join the server, they are to complete the automated verification process before opening a ticket to talk with one of our staff members to get approved into the server. This feature helps mantain the server's security and prevent bots, spammers and trolls from joining the server.
+
+---
+
+#### 3. Self-assignable roles
+Teleia's self-assignable roles feature allows users to choose which roles they want to assign to themselves, granting them greater control over their server experience. This can include things like preferred pronouns, interests, age group, or other criteria. This feature allows users to find like-minded individuals with similar interests.
+
+---
+
+#### 4. Birthday database
+Teleia keeps track of users' birthdays if they choose to set it and send automated messages to celebrate their special day. This can help foster a sense of community and make users feel valued and appreciated as other users will see this celebrartory message and wish the celebrated one a happy birthday.
+
+---
+
 </details>
 
 ---
