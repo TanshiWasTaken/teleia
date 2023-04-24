@@ -78,11 +78,17 @@ Teleia's user feedback system allows users to provide feedback on the server and
 #### 1. Server statistics and analytics
 Teleia provides server statistics and analytics to help administrators understand more about the server. This includes information on user engagement, text and voice channel activity, server growth over time, age groups etc. Teleia also provides insights into which commands are most frequently used and which areas of the server are most active. This information can help administrators make data-driven decisions to improve the server's performance and engagement.
 
+---
+
 #### 2. Scheduling
 Teleia's scheduling feature makes it easy to plan and coordinate events and reminders. With this feature, staff members can schedule events and members can set reminders for themselves and get notified when events are coming up. This keeps the community engaged and informed and makes it easier to plan and organise activities.
 
+---
+
 #### 3. Role-based access control
 Teleia's role-based access control system allows administrators to control access to different server features, resources and channels based on a user's role.
+
+---
 
 #### 4. Integration with external tools and services
 Teleia can integarte with various external tools and services, such as social media platforms, webhooks and API endpoints. This allows for seamless integration with other tools and services, providing administrations with additional functionality and flexibility for managing the server.
