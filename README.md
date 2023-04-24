@@ -32,7 +32,7 @@ Teleia provides intuitive and user-friendly commands for staff members to help t
 
 ---
 #### 4. Strike system integration with designated database
-Teleia includes a strike system that allows staff members to track user behaviour, issue warnings and pardon/penalise users with strikes accordingly. The strikes are recorded in a designated database collection, allowing staff members to easily access and review user history, while also providing for an easier method of storing this information.
+Teleia includes a strike system that allows staff members to track user behaviour, issue warnings and pardon/penalise users with strikes accordingly. The strikes are recorded in a designated database collection, allowing staff members to easily access and review user history, while also providing for an easy method of storing this information.
 
 ---
 #### 5. Automatic moderation
@@ -40,15 +40,16 @@ Teleia can also perform moderative actions based on user behaviour. For example,
 </details>
 
 <details>
+<summary>Teleia offers accommodation features to make users feel welcome and prevent them from getting overwhelemed.</summary>
 2. Accomodation
    - Welcome messages
    - Intuitive and user-friendly verification system
    - Support for self-assignable roles
    - Birthday database for remembering people's birthdays
-<summary>Teleia offers accommodation features to make users feel welcome and prevent them from getting overwhelemed.</summary>
-
 </details>
+
 ---
+
 3. Management
    - Server statistics and analytics
    - 
