@@ -43,6 +43,9 @@ Teleia includes a strike system that allows staff members to track user behaviou
 Teleia can also perform moderative actions based on user behaviour. For example, if a user receives a certain number of strikes, Teleia can then penalise the user according to the amount of strikes the user has. This feature helps to reduce the workload of staff members and ensures rule violations are dealt with consistently and constantly.
 </details>
 
+---
+
+### 2. Accommodation
 <details>
 <summary>Teleia offers accommodation features to make users feel welcome and prevent them from getting overwhelemed.</summary>
 
