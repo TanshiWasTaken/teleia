@@ -11,7 +11,7 @@ el. **τέλεια** /ˈte·li·a/ (adj.)
 grc. **άνω τελεία**[^1] /ˈa·no te·ˈli·a/ (n. f)
 : greek semicolon, upper point, raised point
 
-[^1]: despite the different spelling, the English spelling (and bot's name) - Teleia - is supposed to mean both perfect and semicolon.
+[^1]: despite the different spelling, the English spelling (and bot's name) - Teleia - is supposed to mean both perfect and semicolon and be pronounced the same.
 
 ## Functionality
 
