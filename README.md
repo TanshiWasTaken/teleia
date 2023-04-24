@@ -15,11 +15,26 @@ grc. **άνω τελεία**[^1] /ˈa·no te·ˈli·a/ (n. f)
 
 ## Functionality
 
-1. Moderation
-   - Tweakable AI for blocking inappropriate content
-   - Tweakable AI for censorship
-   - Easy and intuitive commands for staff
-   - Strike system integration with designated database collection
-   - Automatic moderation
+### 1. Moderation
+<details>
+<summary>Teleia offers automated, AI-powered moderation and user-friendly commands for a lighter weight on the staff team's back.</summary>
 
-Teleia offers customisable AI moderation to block inappropriate content, intuitive staff commands for managing the server, a strike system to track user behavior, and automatic temporary mutes or bans based on strikes for an easier weight on the staff team's back.
+#### 1. Tweakable AI moderation for blocking inappropriate content
+Teleia uses customisable artificial intelligence to automatically detect and block inappropriate content such as spam, NSFW content, hate speech, and more. The AI can be configured to suit the needs of the server and to block specific types of content.
+---
+#### 2. Tweakable AI moderation for censorship
+Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics 
+</details>
+
+---
+2. Accomodation
+   - Welcome messages
+   - Intuitive and user-friendly verification system
+   - Support for self-assignable roles
+   - Birthday database for remembering people's birthdays
+
+Teleia offers accommodation features, including a welcome message and user-friendly verification system to prevent spam and self-assignable roles for customising user experience. Teleia also has a birthday database for sending automated celebratory messages on a user's birthday, fostering a sense of community.
+---
+3. Management
+   - Server statistics and analytics
+   - 
