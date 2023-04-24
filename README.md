@@ -1,7 +1,7 @@
 # Teleia
 #### semicolon's custom, all-in-one bot
 
-Teleia is a multi-functional, advanced and modern Discord bot for semicolon whose purpose is to help with moderation, accommodation, management, economics, entertainment and many more.
+Teleia is a multi-functional, advanced and modern discord bot for semicolon whose purpose is to help with moderation, accommodation, management, economics, entertainment and many more.
 
 ## Definition
 
@@ -118,7 +118,7 @@ Teleia's levelling system has its own designated database collection. It will ke
   
 </details>
 
-### 4. Economics
+### 4. Economy
 <details>
 <summary>Teleia offers an economy feature to institute a local currency system to keep users engaged and encourage participation. As well as to offer a medium of exchange for virtual goods and services.</summary>
   
@@ -198,7 +198,7 @@ We respect your privacy and are committed to protecting your data. We comply wit
 
 We collect information that you provide to us when you use the bot, such as:
   - **Discord User ID:** When you send a command to the bot, we receive your Discord user ID.
-  - **Chat Logs:** We may collect your chat logs within the server for analytical purposes.
+  - **Number of messages:** We may collect the number of messages you have sent within the server for analytical purposes.
   - **Commands:** We may collect the commands you use with the bot, along with their time and frequency of usage.
 
 ---
