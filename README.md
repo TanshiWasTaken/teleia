@@ -16,6 +16,6 @@ grc. **άνω τελεία**[^1] /ˈa·no te·ˈli·a/ (n. f)
 ## Functionality
 
 1. Moderation
- - AI for profanity blocking
- - AI for censorship
- - Easy and intuitive moderation commands for staff
+     - AI for profanity blocking
+     - AI for censorship
+     - Easy and intuitive moderation commands for staff
