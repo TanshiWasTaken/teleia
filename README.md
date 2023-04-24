@@ -97,6 +97,11 @@ Teleia can integarte with various external tools and services, such as social me
 
 #### 5. Ticket system
 Teleia's ticket system helps streamline user requests and support issues by providing an automated way for users to open tickets and for staff members to manage and respond to those tickets. This helps improve the user experience and ensure that requests are addressed in a timely and efficient manner.
+
+---
+
+#### 6. Logs
+Teleia tracks and logs all server events, including user actions, moderation actions, and more. This information can be used to investigate incidents or disputes and maintain accountability for users', including staff members', actions.
 </details>
 
 ---
