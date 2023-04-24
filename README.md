@@ -112,7 +112,37 @@ Teleia tracks and logs all server events, including user actions, moderation act
 
 ### 4. Economy
 <details>
+<summary>Teleia offers an economy feature to institute a local currency system not only to keep users engaged and incentivise participation, but to also offer a medium of exchange for virtual goods and services.</summary>
   
+#### 1. Currency system
+Teleia's economy system includes a currency that can be earned by participating in activities, such as chatting, participating in events, or completing tasks assigned by staff members. This currency can be used in exchange for virtual goods and services offered by other members.
+
+---
+
+#### 2. Shop system
+Teleia's economy system provides a shop where users can spend their earned currency on various items. These items can include, but are not limited to, custom roles, custom pieces of literature, custom drawings and whatever other users have decided to sell.
+  
+---
+  
+#### 3. Lottery system
+Teleia's lottery system allows users to spend currency on lottery tickets. At set intervals, a random drawing is held and the winner receives a prize, such as a large sum of currency or a special reward.
+  
+---
+  
+#### 4. Leaderboard
+Teleia's economy system includes a leaderboard, which ranks users based on their total earned currency. This can help incentivise friendly competition and encourage users to participate in server activities to earn more currency and climb the leaderboard.
+  
+---
+  
+#### 5. Logs
+Teleia tracks all transcations and changes to user currency balances, allowing administrators to audit the system and investigate any discrepancies. This helps ensure the system is fair and transparent for all users.
+  
+---
+  
+#### 6. Auction system
+Teleia's economy system offers an auction system, allowing users to bid on items or services offered by other users or the staff team. This creates a sense of competition and excitement within the community and provides users with a new way to engage with each other.
+
+---
 </details>
 
 ---
