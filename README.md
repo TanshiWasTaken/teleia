@@ -24,9 +24,19 @@ Teleia uses customisable artificial intelligence to automatically detect and blo
 
 ---
 #### 2. Tweakable AI moderation for censorship
-Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics, words used in certain contexts, warning users of a loud video/audio file as soon as it was sent etc.
+Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics, words used in certain contexts, warn users of a loud video/audio file as soon as it was sent etc.
 
 ---
+#### 3. Intuitive and user-friendly commands for staff
+Teleia provides intuitive and user-friendly commands for staff members to help them manage the server more efficiently without giving them any headaches or dread in doing so, thanks to the ease of use of its moderation commands.
+
+---
+#### 4. Strike system integration with designated database
+Teleia includes a strike system that allows staff members to track user behaviour, issue warnings and pardon/penalise users with strikes accordingly. The strikes are recorded in a designated database collection, allowing staff members to easily access and review user history, while also providing for an easier method of storing this information.
+
+---
+#### 5. Automatic moderation
+Teleia can also perform moderative actions based on user behaviour. For example, if a user receives a certain number of strikes, Teleia can then penalise the user according to the amount of strikes the user has. This feature helps to reduce the workload of staff members and ensures rule violations are dealt with consistently and constantly.
 </details>
 
 ---
@@ -37,6 +47,7 @@ Teleia also offers AI moderation for censorship, which can be used to censor dis
    - Birthday database for remembering people's birthdays
 
 Teleia offers accommodation features, including a welcome message and user-friendly verification system to prevent spam and self-assignable roles for customising user experience. Teleia also has a birthday database for sending automated celebratory messages on a user's birthday, fostering a sense of community.
+
 ---
 3. Management
    - Server statistics and analytics
