@@ -21,9 +21,12 @@ grc. **άνω τελεία**[^1] /ˈa·no te·ˈli·a/ (n. f)
 
 #### 1. Tweakable AI moderation for blocking inappropriate content
 Teleia uses customisable artificial intelligence to automatically detect and block inappropriate content such as spam, NSFW content, hate speech, and more. The AI can be configured to suit the needs of the server and to block specific types of content.
+
 ---
 #### 2. Tweakable AI moderation for censorship
-Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics 
+Teleia also offers AI moderation for censorship, which can be used to censor discussions of triggering or sensitive topics, words used in certain contexts, warning users of a loud video/audio file as soon as it was sent etc.
+
+---
 </details>
 
 ---
