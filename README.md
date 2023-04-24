@@ -41,6 +41,8 @@ Teleia includes a strike system that allows staff members to track user behaviou
 
 #### 5. Automatic moderation
 Teleia can also perform moderative actions based on user behaviour. For example, if a user receives a certain number of strikes, Teleia can then penalise the user according to the amount of strikes the user has. This feature helps to reduce the workload of staff members and ensures rule violations are dealt with consistently and constantly.
+
+---
 </details>
 
 ### 2. Accommodation
@@ -69,6 +71,8 @@ Teleia keeps track of users' birthdays if they choose to set it and send automat
 
 #### 5. Feedback
 Teleia's user feedback system allows users to provide feedback on the server and its features, which can be used to improve the server and enhance the user experience.
+
+---
 </details>
 
 ### 3. Management
@@ -102,6 +106,8 @@ Teleia's ticket system helps streamline user requests and support issues by prov
 
 #### 6. Logs
 Teleia tracks and logs all server events, including user actions, moderation actions, and more. This information can be used to investigate incidents or disputes and maintain accountability for users', including staff members', actions.
+
+---
 </details>
 
 ---
