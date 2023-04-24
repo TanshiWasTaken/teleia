@@ -215,8 +215,8 @@ We use the collected information to provide, maintain, improve the bot and devel
 ### 3. Sharing of Your Information
 
 We do not sell, rent or otherwise disclose your personal information to third parties except described in this Privacy Policy. We may share your information with the following:
-  - Discord: We may share your information with Discord to provide the bot.
-  - Legal Obligations: We may disclose your information when required by law or in response to a valid legal request.
+  - **Discord:** We share your information with Discord to provide the bot.
+  - **Legal Obligations:** We may disclose your information when required by law or in response to a valid legal request.
 
 ---
 
@@ -225,7 +225,7 @@ We do not sell, rent or otherwise disclose your personal information to third pa
 You have certain rights regarding the personal data we hold about you. You have the right to:
   - Access, correct, or delete your data;
   - Object to the processing of your data;
-  - Restring the processing of your data;
+  - Restrict the processing of your data;
   - Withdraw your consent to the processing of your data.
 
 ---
