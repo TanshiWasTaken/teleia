@@ -93,6 +93,10 @@ Teleia's role-based access control system allows administrators to control acces
 #### 4. Integration with external tools and services
 Teleia can integarte with various external tools and services, such as social media platforms, webhooks and API endpoints. This allows for seamless integration with other tools and services, providing administrations with additional functionality and flexibility for managing the server.
 
+---
+
+#### 5. Ticket system
+Teleia's ticket system helps streamline user requests and support issues by providing an automated way for users to open tickets and for staff members to manage and respond to those tickets. This helps improve the user experience and ensure that requests are addressed in a timely and efficient manner.
 </details>
 
 ---
