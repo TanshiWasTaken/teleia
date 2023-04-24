@@ -178,12 +178,10 @@ The server's structure allows for Teleia to engage with each club in unique ways
   
 </details>
 
----
-
-## Privacy policy
-
-This privacy policy explains how Semicolon ("we", "us", "the Server") collects, uses, and shares information about you when you our Discord bot, Teleia (the "Bot").
-
+## Privacy Policy
+<details>
+<summary>This privacy policy explains how Semicolon ("we", "us", "the Server") collects, uses, and shares information about you when you our Discord bot, Teleia (the "Bot").</summary>
+<br>
 We respect your privacy and are committed to protecting your personal data. We comply with the GDPR, CalOPPA and CCPA. This Privacy Policy describes our policies and practices with regard to data collection, use and disclosure, as well as the choices available to you regarding the use of your information.
 
 ### 1. Information We Collect
@@ -202,11 +200,15 @@ We use the information we collect to provide, maintain, and improve the Bot and 
   - To analyse and improve the Bot;
   - To enforce our terms and policies.
 
+---
+
 ### 3. Sharing of Your Information
 
 We do not sell, rent or otherwise disclose your persional information to third parties, except as describes in this Privacy Policy. We may share your information with:
   - Discord: We may share your information with Discord to provide the Bot.
   - Legal Obligations: We may disclose your information when required by law, or in response to a valid legal request.
+
+---
 
 ### 4. Your Rights and Choices
 
@@ -216,18 +218,27 @@ You have cretain rights regarding the personal data we hold about you. You have 
   - Restring the processing of your personal data;
   - Withdraw your consent to the processing of your personal data.
 
+---
+
 ### 5. Data Retention
 
 We retain your personal information for as long as necessary to provide you with the Bot and to comply with our legal obligations.
+
+---
 
 ### 6. Security
 
 We take appropriate technical and organisational measures to protect your personal data from loss, unauthorised access, alteration or destruction.
 
+---
+
 ### 7. Changes to this Privacy Policy
 
 We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
 
+---
+
 ### 8. Contact Us
 
 If you have any questions or concerns about this Privacy Policy or our data practices, or you wish to object, restrict the processing of your personal data or withdraw your consent to it, please open a ticket in the Server.
+</details>
