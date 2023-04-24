@@ -145,4 +145,5 @@ Teleia's economy system offers an auction system, allowing users to bid on items
 ---
 </details>
 
+### 5. Entertainment
 ---
