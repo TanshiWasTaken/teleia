@@ -175,6 +175,11 @@ Teleia is able to host special events and challenges from which users are able t
   
 #### 5. Clubs
 The server's structure allows for Teleia to engage with each club in unique ways that match the club's topic.
+
+---
+  
+#### 6. Personality
+Teleia uses artifical intelligence while generating responses to certain commands or auto-responders in order to give Teleia a personality. This can help with removing the user-machine barrier and making Teleia more approachable for users to interact with.
   
 </details>
 
