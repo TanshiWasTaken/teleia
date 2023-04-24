@@ -110,4 +110,9 @@ Teleia tracks and logs all server events, including user actions, moderation act
 ---
 </details>
 
+### 4. Economy
+<details>
+  
+</details>
+
 ---
