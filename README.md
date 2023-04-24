@@ -118,7 +118,7 @@ Teleia's levelling system has its own designated database collection. It will ke
   
 </details>
 
-### 4. Economy
+### 4. Economics
 <details>
 <summary>Teleia offers an economy feature to institute a local currency system to keep users engaged and encourage participation. As well as to offer a medium of exchange for virtual goods and services.</summary>
   
