@@ -62,5 +62,8 @@ module.exports = {
         if (interaction.customId !== 'dms' || !interaction.isStringSelectMenu()) return;
         await interaction.member.roles.add(`${interaction.values[0] == 'otd' ? '1094025769442869378' : interaction.values[0] == 'atd' ? '1094025780285161483' : '1094047480892629002'}`);
         await main(interaction);
+
+        // code the next step of the verification system with buttons and pick up from step2_0 (if all roles present)
+        // the next steps are prohibited individuals and rules with a final confirm embed
     },
 };
