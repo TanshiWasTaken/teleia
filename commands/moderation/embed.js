@@ -7,9 +7,9 @@ async function description(interaction) {
     await interaction.reply({ content: 'send a description below. type `cancel` to cancel the edit', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
-            if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
+            if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete().catch(() => { return; }); return await interaction.deleteReply().catch(() => { return; }); }
             await collected.first().delete().catch(() => { return; });
-            await interaction.deleteReply();
+            await interaction.deleteReply().catch(() => { return; });
             embed.setDescription(collected.first().content);
         });
 }
@@ -17,30 +17,30 @@ async function image(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the image or type `cancel` to cancel the edit.', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
-            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply(); return embed.setImage(); }
-            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setImage(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); return await interaction.deleteReply().catch(() => { return; }); }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setImage(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setImage(regex[0]); }
-            else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.channel.send({ content: 'videos, audios or anything else other than an image or gif cannot be used as an image.', ephemeral: true }); }
-            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found', ephemeral: true }); }
+            else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.followUp({ content: 'videos, audios or anything else other than an image or gif cannot be used as an image.', ephemeral: true }); }
+            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.followUp({ content: 'no attachment or link was found', ephemeral: true }); }
             await collected.first().delete().catch(() => { return; });
-            await interaction.deleteReply();
+            await interaction.deleteReply().catch(() => { return; });
         });
 }
 async function thumbnail(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the thumbnail or type `cancel` to cancel the edit', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
-            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply(); return embed.setThumbnail(); }
-            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); await interaction.deleteReply(); return; }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setThumbnail(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); return await interaction.deleteReply().catch(() => { return; }); }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setThumbnail(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setThumbnail(regex[0]); }
-            else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.channel.send({ content: 'videos, audios or anything else other than an image or gif cannot be used as a thumbnail.', ephemeral: true }); }
-            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.channel.send({ content: 'no attachment or link was found', ephemeral: true }); }
+            else if (collected.first().attachments.first() && !collected.first().attachments.first().contentType.startsWith('image')) { await interaction.followUp({ content: 'videos, audios or anything else other than an image or gif cannot be used as a thumbnail.', ephemeral: true }); }
+            else if (!collected.first().attachments.first()?.url && !regex) { await interaction.followUp({ content: 'no attachment or link was found', ephemeral: true }); }
             await collected.first().delete().catch(() => { return; });
-            await interaction.deleteReply();
+            await interaction.deleteReply().catch(() => { return; });
         });
 }
 async function update_embed(interaction) {
@@ -75,11 +75,11 @@ async function button_callback(interaction, i, editEmbed) {
     case 'create': {
         switch (i.customId) {
         case 'cancel': {
-            await interaction.deleteReply();
+            await interaction.deleteReply().catch(() => { return; });
             break;
         }
         case 'finish': {
-            await interaction.deleteReply().then(await interaction.channel.send({ embeds: [embed] }));
+            await interaction.deleteReply().then(await interaction.channel.send({ embeds: [embed] })).catch(() => { return; });
             const newEmbed = new Embed({
                 _id: new mongoose.Types.ObjectId(),
                 name: interaction.options.getString('name'),
@@ -98,7 +98,7 @@ async function button_callback(interaction, i, editEmbed) {
     case 'edit': {
         switch (i.customId) {
         case 'cancel': {
-            await interaction.deleteReply();
+            await interaction.deleteReply().catch(() => { return; });
             break;
         }
         case 'finish': {
@@ -348,7 +348,10 @@ module.exports = {
             break;
         }
         case 'send': {
-            if (interaction.options.getString('name') == 'info') {
+            const customEmbed = new EmbedBuilder()
+                .setColor(process.env.COLOUR);
+            switch (interaction.options.getString('name')) {
+            case 'info': {
                 const infoSelect = new ActionRowBuilder()
                     .addComponents(
                         new StringSelectMenuBuilder()
@@ -382,12 +385,23 @@ module.exports = {
                                     .setEmoji('🤝'),
                             ),
                     );
-                const infoEmbed = new EmbedBuilder()
-                    .setColor(process.env.COLOUR)
-                    .setDescription(`⸝⸝ ★ __***\`INFO\`***__ ***!*** . . .\n
+                return await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply().catch(() => { return; }), await interaction.channel.send({ embeds: [customEmbed.setDescription(`⸝⸝ ★ __***\`INFO\`***__ ***!*** . . .\n
 ✰ \`O1\` — **__find out more__ *!***
-> click the drop down menu below to select a topic to view information on`);
-                return await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply(), await interaction.channel.send({ embeds: [infoEmbed], components: [infoSelect] }));
+> click the drop down menu below to select a topic to view information on`)], components: [infoSelect] }));
+            }
+            case 'verification': {
+                const verification_button = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('verification1')
+                            .setLabel('Begin verification')
+                            .setStyle(ButtonStyle.Primary)
+                            .setEmoji('✅'),
+                    );
+                return await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply().catch(() => { return; }), await interaction.channel.send({ embeds: [customEmbed.setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
+✰ \`O1\` — **__get verified__ *!***
+> click the button below to begin verification! our guided verification process consists of selecting roles, reading server information, and answering questions in a ticket.`)], components: [verification_button] }));
+            }
             }
             const viewEmbed = await Embed.findOne({ name: interaction.options.getString('name') });
             if (!viewEmbed) return await interaction.reply({ embeds: [embed.setDescription(`Embed \`${interaction.options.getString('name')}\` not found`)] });
@@ -396,7 +410,7 @@ module.exports = {
                 .setDescription(viewEmbed.content);
             viewEmbed.thumbnail ? sendViewEmbed.setThumbnail(viewEmbed.thumbnail) : 0;
             viewEmbed.image ? sendViewEmbed.setImage(viewEmbed.image) : 0;
-            await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply(), await interaction.channel.send({ embeds: [sendViewEmbed] }));
+            await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply().catch(() => { return; }), await interaction.channel.send({ embeds: [sendViewEmbed] }));
             break;
         }
         case 'edit': {
