@@ -5,11 +5,11 @@ module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (!interaction.customId === 'infoEmbeds' || !interaction.isStringSelectMenu()) return;
+        if (!interaction.customId === 'info_select' || !interaction.isStringSelectMenu()) return;
         const info_embed = new EmbedBuilder()
             .setColor(process.env.COLOUR);
         switch (interaction.values[0]) {
-        case 'about_us': {
+        case 'info_about_us': {
             const about_us = await Embed.findOne({ name: 'about us' });
             if (!about_us) return await interaction.reply({ content: 'this embed is not working at the moment', ephemeral: true });
             about_us.thumbnail ? info_embed.setThumbnail(about_us.thumbnail) : 0;
@@ -17,7 +17,7 @@ module.exports = {
             await interaction.reply({ embeds: [info_embed.setDescription(about_us.content)], ephemeral: true });
             break;
         }
-        case 'strike_system': {
+        case 'info_strike_system': {
             const strike_system = await Embed.findOne({ name: 'strike system' });
             if (!strike_system) return await interaction.reply({ content: 'this embed is not working at the moment', ephemeral: true });
             strike_system.thumbnail ? info_embed.setThumbnail(strike_system.thumbnail) : 0;
@@ -25,7 +25,7 @@ module.exports = {
             await interaction.reply({ embeds: [info_embed.setDescription(strike_system.content)], ephemeral: true });
             break;
         }
-        case 'server_rewards': {
+        case 'info_server_rewards': {
             const server_rewards = await Embed.findOne({ name: 'server rewards' });
             if (!server_rewards) return await interaction.reply({ content: 'this embed is not working at the moment', ephemeral: true });
             server_rewards.thumbnail ? info_embed.setThumbnail(server_rewards.thumbnail) : 0;
@@ -33,7 +33,7 @@ module.exports = {
             await interaction.reply({ embeds: [info_embed.setDescription(server_rewards.content)], ephemeral: true });
             break;
         }
-        case 'server_map': {
+        case 'info_server_map': {
             const server_map = await Embed.findOne({ name: 'server map' });
             if (!server_map) return await interaction.reply({ content: 'this embed is not working at the moment', ephemeral: true });
             server_map.thumbnail ? info_embed.setThumbnail(server_map.thumbnail) : 0;
@@ -41,7 +41,7 @@ module.exports = {
             await interaction.reply({ embeds: [info_embed.setDescription(server_map.content)], ephemeral: true });
             break;
         }
-        case 'p&a': {
+        case 'info_p&a': {
             const p_and_a = await Embed.findOne({ name: 'p&a' });
             if (!p_and_a) return await interaction.reply({ content: 'this embed is not working at the moment', ephemeral: true });
             p_and_a.thumbnail ? info_embed.setThumbnail(p_and_a.thumbnail) : 0;
