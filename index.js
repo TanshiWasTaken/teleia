@@ -2,6 +2,7 @@ require('dotenv/config');
 const [fs, path] = [require('node:fs'), require('node:path')];
 const { Client, Collection, IntentsBitField, Partials } = require('discord.js');
 const mongoose = require('mongoose');
+const { EventEmitter } = require('node:events');
 const client = new Client({
     intents: [
         IntentsBitField.Flags.AutoModerationConfiguration,
@@ -33,6 +34,9 @@ const client = new Client({
         Partials.User,
     ],
 });
+
+EventEmitter.setMaxListeners(0);
+process.noDeprecation = true;
 
 client.commands = new Collection();
 client.events = new Collection();
