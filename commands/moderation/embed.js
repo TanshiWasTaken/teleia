@@ -11,7 +11,7 @@ async function description(interaction) {
             await collected.first().delete().catch(() => { return; });
             await interaction.deleteReply().catch(() => { return; });
             embed.setDescription(collected.first().content);
-        });
+        }).catch(() => { return; });
 }
 async function image(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the image or type `cancel` to cancel the edit.', ephemeral: true });
@@ -26,7 +26,7 @@ async function image(interaction) {
             else if (!collected.first().attachments.first()?.url && !regex) { await interaction.followUp({ content: 'no attachment or link was found', ephemeral: true }); }
             await collected.first().delete().catch(() => { return; });
             await interaction.deleteReply().catch(() => { return; });
-        });
+        }).catch(() => { return; });
 }
 async function thumbnail(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the thumbnail or type `cancel` to cancel the edit', ephemeral: true });
@@ -41,12 +41,23 @@ async function thumbnail(interaction) {
             else if (!collected.first().attachments.first()?.url && !regex) { await interaction.followUp({ content: 'no attachment or link was found', ephemeral: true }); }
             await collected.first().delete().catch(() => { return; });
             await interaction.deleteReply().catch(() => { return; });
-        });
+        }).catch(() => { return; });
+}
+async function footer(interaction) {
+    await interaction.reply({ content: 'send a footer below. type `remove` to remove the footer or type `cancel` to cancel the edit', ephemeral: true });
+    await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
+        .then(async collected => {
+            if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete().catch(() => { return; }); return await interaction.deleteReply().catch(() => { return; }); }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setFooter(null); }
+            await collected.first().delete().catch(() => { return; });
+            await interaction.deleteReply().catch(() => { return; });
+            embed.setFooter({ text: collected.first().content });
+        }).catch(() => { return; });
 }
 async function update_embed(interaction) {
     return await interaction.editReply({
         embeds: [embed],
-    });
+    }).catch(() => { return; });
 }
 async function select_callback(interaction, i) {
     switch (interaction.options.getSubcommand()) {
@@ -64,6 +75,10 @@ async function select_callback(interaction, i) {
             await thumbnail(i);
             break;
         }
+        case 'footer': {
+            await footer(i);
+            break;
+        }
         }
         await update_embed(interaction);
         break;
@@ -76,6 +91,7 @@ async function button_callback(interaction, i, editEmbed) {
         switch (i.customId) {
         case 'cancel': {
             await interaction.deleteReply().catch(() => { return; });
+            embed.setFooter(null);
             break;
         }
         case 'finish': {
@@ -90,6 +106,7 @@ async function button_callback(interaction, i, editEmbed) {
             await newEmbed.save();
             embed.setThumbnail();
             embed.setImage();
+            embed.setFooter(null);
             break;
         }
         }
@@ -109,6 +126,7 @@ async function button_callback(interaction, i, editEmbed) {
             await editEmbed.save();
             embed.setThumbnail();
             embed.setImage();
+            embed.setFooter(null);
             break;
         }
         }
@@ -203,7 +221,7 @@ async function button_pages(interaction, pages, time = 60000) {
     collector.on('end', async () => {
         await currentPage.edit({
             components: [],
-        });
+        }).catch(() => { return; });
     });
     return currentPage;
 }
@@ -228,6 +246,11 @@ const select = new ActionRowBuilder()
                     .setValue('thumbnail')
                     .setDescription('Edit the thumbnail of the embed')
                     .setEmoji('🖼️'),
+                new StringSelectMenuOptionBuilder()
+                    .setLabel('Footer')
+                    .setValue('footer')
+                    .setDescription('Edit the footer of the embed')
+                    .setEmoji('🦶'),
             ),
     );
 const buttons = new ActionRowBuilder()
@@ -273,6 +296,12 @@ module.exports = {
                         .setName('image')
                         .setDescription('the image of the embed')
                         .setRequired(false),
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('footer')
+                        .setDescription('the footer of the embed')
+                        .setRequired(false),
                 ),
         )
         .addSubcommand(subcommand =>
@@ -316,9 +345,10 @@ module.exports = {
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {
         case 'create': {
-            if (await Embed.findOne({ name: interaction.options.getString('name') })) return await interaction.reply({ embeds: [embed.setDescription(`An embed with the name \`${interaction.options.getString('name')}\` already exists`)] });
+            if (await Embed.findOne({ name: interaction.options.getString('name') })) return await interaction.reply({ embeds: [embed.setDescription(`an embed with the name \`${interaction.options.getString('name')}\` already exists`)] });
             interaction.options.getAttachment('thumbnail')?.attachment ? embed.setThumbnail(interaction.options.getAttachment('thumbnail')?.attachment) : 0;
             interaction.options.getAttachment('image')?.attachment ? embed.setImage(interaction.options.getAttachment('image')?.attachment) : 0;
+            interaction.options.getString('footer') ? embed.setFooter(interaction.options.getString('footer')) : 0;
             await interaction.reply({
                 embeds: [interaction.options.getString('content') ? embed.setDescription(interaction.options.getString('content')) : embed.setDescription('placeholder content')],
                 components: [select, buttons],
@@ -355,32 +385,32 @@ module.exports = {
                 const infoSelect = new ActionRowBuilder()
                     .addComponents(
                         new StringSelectMenuBuilder()
-                            .setCustomId('infoEmbeds')
+                            .setCustomId('info_select')
                             .setPlaceholder('Select an info embed to view')
                             .addOptions(
                                 new StringSelectMenuOptionBuilder()
                                     .setLabel('About us')
-                                    .setValue('about_us')
+                                    .setValue('info_about_us')
                                     .setDescription('basic information about the server')
                                     .setEmoji('ℹ️'),
                                 new StringSelectMenuOptionBuilder()
                                     .setLabel('Strike system')
-                                    .setValue('strike_system')
+                                    .setValue('info_strike_system')
                                     .setDescription('information on how the strike system works')
                                     .setEmoji('❌'),
                                 new StringSelectMenuOptionBuilder()
                                     .setLabel('Server rewards')
-                                    .setValue('server_rewards')
+                                    .setValue('info_server_rewards')
                                     .setDescription('information about server rewards')
                                     .setEmoji('🏆'),
                                 new StringSelectMenuOptionBuilder()
                                     .setLabel('Server map')
-                                    .setValue('server_map')
+                                    .setValue('info_server_map')
                                     .setDescription('a map of the server')
                                     .setEmoji('🗺️'),
                                 new StringSelectMenuOptionBuilder()
                                     .setLabel('Partners and affiliates')
-                                    .setValue('p&a')
+                                    .setValue('info_p&a')
                                     .setDescription('information about our partners and affiliates')
                                     .setEmoji('🤝'),
                             ),
@@ -401,6 +431,43 @@ module.exports = {
                 return await interaction.deferReply({ ephemeral: true }).then(await interaction.deleteReply().catch(() => { return; }), await interaction.channel.send({ embeds: [customEmbed.setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
 ✰ \`O1\` — **__get verified__ *!***
 > click the button below to begin verification! our guided verification process consists of selecting roles, reading server information, and answering questions in a ticket.`)], components: [verification_button] }));
+            }
+            case 'tickets': {
+                return await interaction.deferReply({ ephemeral: true })
+                    .then(await interaction.deleteReply().catch(() => { return; }),
+                        await interaction.channel.send({
+                            embeds: [
+                                customEmbed.setDescription(`⸝⸝ ★ __***\`TICKETS\`***__ ***!*** . . .\n
+✰ \`O1\` — **__do you have an issue__ *?***
+> click the button representing the category your issue fits in to open a ticket`)
+                                    .setThumbnail('https://th.bing.com/th/id/R.55b2b783c01b21a5f0b9c8bea8041723?rik=sIPz2agCmNLraQ&pid=ImgRaw&r=0'),
+                            ],
+                            components: [
+                                new ActionRowBuilder()
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('tickets_support')
+                                            .setLabel('support')
+                                            .setStyle(ButtonStyle.Secondary)
+                                            .setEmoji('🛠️'),
+                                        new ButtonBuilder()
+                                            .setCustomId('tickets_connections')
+                                            .setLabel('connections')
+                                            .setStyle(ButtonStyle.Secondary)
+                                            .setEmoji('🔗'),
+                                        new ButtonBuilder()
+                                            .setCustomId('tickets_report')
+                                            .setLabel('report')
+                                            .setStyle(ButtonStyle.Secondary)
+                                            .setEmoji('🚨'),
+                                        new ButtonBuilder()
+                                            .setCustomId('tickets_appeal')
+                                            .setLabel('appeal')
+                                            .setStyle(ButtonStyle.Secondary)
+                                            .setEmoji('📝'),
+                                    ),
+                            ],
+                        }));
             }
             }
             const viewEmbed = await Embed.findOne({ name: interaction.options.getString('name') });
