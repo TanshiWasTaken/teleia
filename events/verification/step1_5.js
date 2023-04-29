@@ -3,6 +3,7 @@ const pronouns_roles = ['1094025640992325654', '1094025628732362783', '109402565
 const age_roles = ['1094025696701071441', '1094025714350690328', '1094025725037772831'];
 const ping_roles = ['1094025735422873680', '1094025745778614324', '1094025757254221994'];
 const dm_roles = ['1094025769442869378', '1094025780285161483', '1094047480892629002'];
+const step2_0 = require('./step2_0');
 
 async function main(interaction) {
     const prns_r = [];
@@ -34,7 +35,7 @@ async function main(interaction) {
                         .setStyle(ButtonStyle.Danger)
                         .setEmoji('🔁'),
                     new ButtonBuilder()
-                        .setCustomId('verification2')
+                        .setCustomId('verification1-2')
                         .setLabel('yes, continue')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji('➡️'),
@@ -45,7 +46,7 @@ async function main(interaction) {
     await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && (i.customId == 'retry_verification1' || i.customId == 'verification2'), componentType: ComponentType.Button })
         .then(async (collected) => {
             await interaction.deleteReply().catch(() => { return; });
-            if (collected.customId !== 'verification2') {
+            if (collected.customId !== 'verification1-2') {
                 await collected.deferReply({ ephemeral: true });
                 return interaction.client.emit('interactionCreate', collected);
             }
@@ -57,13 +58,14 @@ module.exports = {
     once: false,
     async execute(interaction) {
         if (interaction.customId == 'verification1') {
-            return await main(interaction);
+            interaction.customId = 'verification1-2';
+            return await step2_0.execute(interaction);
         }
         if (interaction.customId !== 'dms' || !interaction.isStringSelectMenu()) return;
         await interaction.member.roles.add(`${interaction.values[0] == 'otd' ? '1094025769442869378' : interaction.values[0] == 'atd' ? '1094025780285161483' : '1094047480892629002'}`);
         await main(interaction);
 
-        // code the next step of the verification system with buttons and pick up from step2_0 (if all roles present)
+        // code the next step of the verification system with buttons
         // the next steps are prohibited individuals and rules with a final confirm embed
     },
 };
