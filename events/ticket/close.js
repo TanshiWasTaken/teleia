@@ -22,7 +22,7 @@ async function close(ticket, interaction, audit) {
 > ・**opened by:** ${interaction.guild.members.cache.find(m => m.id == ticket.author)}
 > ・**handled by:** ${ticket.handledBy.map(m => `<@${m}>`).join(', ') || 'nobody'}
 > ・**closed by:** ${interaction.guild.members.cache.find(m => m.id == ticket.closedBy)}
-> ・**summary:** \`${ticket.summary}\`${ticket.notes.length > 0 ? `\n> ・**notes:** ||\`${ticket.notes.map(n => `${interaction.guild.members.cache.find(m => m.id == n.author)} - "${n.text}"`).join('\n> ')}\`||` : ''}
+> ・**summary:** \`${ticket.summary}\`${ticket.notes.length > 0 ? `\n> ・**notes:** ||${ticket.notes.map((n, index) => `**${index + 1}.** \`"${n.text}"\` (${interaction.guild.members.cache.find(m => m.id == n.author)})`).join('\n> ')}||` : ''}
 
 ✰ \`O2\` — **__transcript__ *!***
 > you can view the transcript of this ticket by clicking the button below!`),
