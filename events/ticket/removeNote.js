@@ -52,7 +52,7 @@ module.exports = {
                         new StringSelectMenuBuilder()
                             .setCustomId('tickets_notes_remove_select')
                             .setPlaceholder('select a note to remove')
-                            .addOptions(ticket.notes.map((note, index) => new StringSelectMenuOptionBuilder().setLabel(`${index + 1}. ${note.text}`).setValue(`${index + 1}`).setDescription(`added by ${interaction.guild.members.cache.find(m => m.id == note.author)}`))),
+                            .addOptions(ticket.notes.map((note, index) => new StringSelectMenuOptionBuilder().setLabel(`${index + 1}. ${note.text.length > 22 ? `${note.text.substring(0, 19)}...` : note.text}`).setValue(`${index + 1}`).setDescription(`added by ${interaction.guild.members.cache.find(m => m.id == note.author).user.tag}`))),
                     ),
             ],
             ephemeral: true,
