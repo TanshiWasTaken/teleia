@@ -57,8 +57,8 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId('tickets_staffPanel')
-                    .setLabel('back to the panel')
+                    .setCustomId('tickets_userInfo_back')
+                    .setLabel('back')
                     .setStyle(ButtonStyle.Primary)
                     .setEmoji('◀️'),
                 new ButtonBuilder()
@@ -94,8 +94,13 @@ ${member.nickname ? `> ・**nickname:** \`${member.nickname}\`\n` : ''}> ・**jo
             ],
             ephemeral: true,
         });
-        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_staffPanel', 'tickets_userInfo_avatarU', 'tickets_userInfo_avatarG'].includes(i.customId), time: 60000 })
-            .then(async () => {
+        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_userInfo_back', 'tickets_userInfo_avatarU', 'tickets_userInfo_avatarG'].includes(i.customId), time: 60000 })
+            .then(async (i) => {
+                if (i.customId == 'tickets_userInfo_back') {
+                    i.customId = 'tickets_staffPanel_select';
+                    i.values = ['2'];
+                    i.client.emit('interactionCreate', i);
+                }
                 await interaction.deleteReply().catch(() => { return; });
             })
             .catch(async () => {
