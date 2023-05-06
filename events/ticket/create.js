@@ -7,7 +7,99 @@ module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (interaction.customId !== 'tickets_createModal' || !interaction.isModalSubmit()) return;
+        if (interaction.customId == 'tickets_verify') {
+            const ticket = new Ticket({
+                _id: new mongoose.Types.ObjectId(),
+                id: `v-${await Ticket.countDocuments({ category: 'verify' }) + 1}`,
+                category: 'verify',
+                author: interaction.user.id,
+                open: true,
+                pinned: false,
+                archived: false,
+            });
+            const channel = await interaction.guild.channels.create({
+                name: `・${ticket.category.charAt(0)}＃${await Ticket.countDocuments({ category: 'verify' }) + 1}`,
+                permissionOverwrites: [
+                    {
+                        id: interaction.guild.roles.everyone.id,
+                        deny: [PermissionsBitField.Flags.ViewChannel],
+                    },
+                    {
+                        id: interaction.user.id,
+                        allow: [PermissionsBitField.Flags.ViewChannel],
+                    },
+                ],
+            });
+            ticket.channel = channel.id;
+            await ticket.save();
+            await channel.setParent('1092188385583579256');
+            await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(process.env.COLOUR)
+                        .setDescription(`ticket created: ${channel}`),
+                ],
+                ephemeral: true,
+            });
+            await channel.send({ content: `<@&1094017845781868564> <@&1094017816941821994> ${interaction.user}` }).then(m => m.delete().catch(() => { return; }));
+            await channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(process.env.COLOUR)
+                        .setDescription(`⸝⸝ ★ __***\`${interaction.user.username.toUpperCase()}'S TICKET\`***__ ***!*** . . .\n
+✰ \`O1\` — **__please answer the questions below__ *!***
+> **1.** how did you hear about us?
+> **2.** what made you want to join?
+> **3.** are you an agere/caregiver?
+> **4.** are you a furry?
+> **5.** are you a system?`)
+                        .setThumbnail('https://th.bing.com/th/id/R.55b2b783c01b21a5f0b9c8bea8041723?rik=sIPz2agCmNLraQ&pid=ImgRaw&r=0'),
+                ],
+                components: [
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('tickets_staffPanel')
+                                .setLabel('staff panel')
+                                .setStyle(ButtonStyle.Secondary)
+                                .setEmoji('🛠️'),
+                        ),
+                ],
+            });
+            const stats = await StatsTickets.findOne();
+            if (!stats) {
+                await StatsTickets.create({
+                    _id: new mongoose.Types.ObjectId(),
+                    nTickets: 0,
+                    nSupport: 0,
+                    nConnections: 0,
+                    nReport: 0,
+                    nAppeal: 0,
+                    nVerify: 0,
+                    bad: 0,
+                    veryBad: 0,
+                    neutral: 0,
+                    good: 0,
+                    veryGood: 0,
+                });
+            }
+            stats.nTickets++;
+            stats.nVerify++;
+            await stats.save();
+            const audit = await interaction.guild.channels.cache.find(c => c.id === '1092602285286232095');
+            return await audit.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(process.env.COLOUR)
+                        .setDescription(`⸝⸝ ★ __***\`TICKET CREATED\`***__ ***!*** . . .\n
+✰ \`O1\` — **__a ticket was created__ *!***
+> ・**ticket:** ${interaction.guild.channels.cache.find(c => c.id == ticket.channel)} (\`${ticket.id}\`)
+> ・**category:** ${ticket.category}
+> ・**opened by:** ${interaction.user}`),
+                ],
+            });
+        }
+        if (interaction.customId !== 'tickets_createModal') return;
         const reason = interaction.components[0].components[0].value;
         const existing = await Ticket.findOne({ author: interaction.user.id, open: true, saved: false });
         if (existing) {
@@ -55,7 +147,7 @@ module.exports = {
             ],
             ephemeral: true,
         });
-        await channel.send({ content: '<@&1094017845781868564> <@&1094017816941821994>' }).then(m => m.delete().catch(() => { return; }));
+        await channel.send({ content: `<@&1094017845781868564> <@&1094017816941821994> ${interaction.user}` }).then(m => m.delete().catch(() => { return; }));
         await channel.send({
             embeds: [
                 new EmbedBuilder()
@@ -80,11 +172,6 @@ ${ticket.category == 'support' ?
             components: [
                 new ActionRowBuilder()
                     .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('tickets_close')
-                            .setLabel('close ticket')
-                            .setStyle(ButtonStyle.Danger)
-                            .setEmoji('🔒'),
                         new ButtonBuilder()
                             .setCustomId('tickets_staffPanel')
                             .setLabel('staff panel')
