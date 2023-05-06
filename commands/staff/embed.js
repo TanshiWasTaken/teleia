@@ -17,8 +17,8 @@ async function image(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the image or type `cancel` to cancel the edit.', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
-            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setImage(); }
-            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); return await interaction.deleteReply().catch(() => { return; }); }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete().catch(() => { return; }); await interaction.deleteReply().catch(() => { return; }); return embed.setImage(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete().catch(() => { return; }); return await interaction.deleteReply().catch(() => { return; }); }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setImage(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setImage(regex[0]); }
@@ -32,8 +32,8 @@ async function thumbnail(interaction) {
     await interaction.reply({ content: 'send an image or a link to one below. type `remove` to remove the thumbnail or type `cancel` to cancel the edit', ephemeral: true });
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
-            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setThumbnail(); }
-            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete(); return await interaction.deleteReply().catch(() => { return; }); }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete().catch(() => { return; }); await interaction.deleteReply().catch(() => { return; }); return embed.setThumbnail(); }
+            else if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete().catch(() => { return; }); return await interaction.deleteReply().catch(() => { return; }); }
             const regex = /^(?:(?:https?):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?.(jpg|jpeg|gif|png)(\?(.*))?$/g.exec(collected.first().content);
             if (collected.first().attachments.first()?.url && collected.first().attachments.first()?.contentType.startsWith('image')) { embed.setThumbnail(collected.first().attachments.first()?.url); }
             else if (regex) { embed.setThumbnail(regex[0]); }
@@ -48,7 +48,7 @@ async function footer(interaction) {
     await interaction.channel.awaitMessages({ filter: m => m.author.id === interaction.user.id, max: 1 })
         .then(async collected => {
             if (collected.first().content.toLowerCase() == 'cancel') { await collected.first().delete().catch(() => { return; }); return await interaction.deleteReply().catch(() => { return; }); }
-            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete(); await interaction.deleteReply().catch(() => { return; }); return embed.setFooter(null); }
+            if (collected.first().content.toLowerCase() == 'remove') { await collected.first().delete().catch(() => { return; }); await interaction.deleteReply().catch(() => { return; }); return embed.setFooter(null); }
             await collected.first().delete().catch(() => { return; });
             await interaction.deleteReply().catch(() => { return; });
             embed.setFooter({ text: collected.first().content });
