@@ -58,7 +58,7 @@ module.exports = {
                         .addComponents(
                             new ButtonBuilder()
                                 .setCustomId('tickets_userInfo')
-                                .setLabel('back to user info')
+                                .setLabel('back')
                                 .setStyle(ButtonStyle.Primary)
                                 .setEmoji('◀️'),
                             new ButtonBuilder()
