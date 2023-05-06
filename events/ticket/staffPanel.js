@@ -57,6 +57,11 @@ module.exports = {
                         .setLabel('notes')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji('📝'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_users')
+                        .setLabel('users')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('👥'),
                 ) : new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -108,6 +113,11 @@ module.exports = {
                         .setLabel('notes')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji('📝'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_users')
+                        .setLabel('users')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('👥'),
                 );
         }
         const paginator = new ActionRowBuilder()
@@ -125,6 +135,22 @@ module.exports = {
                             .setDefault(interaction.values && interaction.values[0] == '2' ? true : false),
                     ),
             );
+        if (!ticket.pinned) {
+            pages.push(new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_users')
+                        .setLabel('users')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('👥'),
+                ));
+            paginator.components[0].addOptions(
+                new StringSelectMenuOptionBuilder()
+                    .setLabel('page 3')
+                    .setValue('3')
+                    .setDefault(interaction.values && interaction.values[0] == '3' ? true : false),
+            );
+        }
         if (!interaction.member.roles.cache.find(r => ['1094017816941821994', '1094017845781868564'].includes(r.id)) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
             return await interaction.reply({
                 embeds: [
@@ -191,8 +217,25 @@ module.exports = {
                 });
                 break;
             }
+            case '3': {
+                await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(process.env.COLOUR)
+                            .setDescription(`⸝⸝ ★ __***\`STAFF PANEL\`***__ ***!*** . . .\n
+✰ \`O1\` — **__what would you like to do__ *?***
+> this is the staff panel for tickets, you can manage this ticket using the buttons below`),
+                    ],
+                    components: [
+                        pages[2],
+                        paginator,
+                    ],
+                    ephemeral: true,
+                });
+                break;
             }
-            return await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes'].includes(i.customId), time: 60000 })
+            }
+            return await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes', 'tickets_users'].includes(i.customId), time: 60000 })
                 .then(async () => {
                     await interaction.deleteReply().catch(() => { return; });
                 })
@@ -200,6 +243,7 @@ module.exports = {
                     await interaction.deleteReply().catch(() => { return; });
                 });
         }
+        await paginator.components[0].options[0].setDefault(true);
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
@@ -210,24 +254,11 @@ module.exports = {
             ],
             components: [
                 pages[0],
-                new ActionRowBuilder()
-                    .addComponents(
-                        new StringSelectMenuBuilder()
-                            .setCustomId('tickets_staffPanel_select')
-                            .addOptions(
-                                new StringSelectMenuOptionBuilder()
-                                    .setLabel('page 1')
-                                    .setValue('1')
-                                    .setDefault(true),
-                                new StringSelectMenuOptionBuilder()
-                                    .setLabel('page 2')
-                                    .setValue('2'),
-                            ),
-                    ),
+                paginator,
             ],
             ephemeral: true,
         });
-        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes'].includes(i.customId), time: 60000 })
+        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes', 'tickets_users'].includes(i.customId), time: 60000 })
             .then(async () => {
                 await interaction.deleteReply().catch(() => { return; });
             })
