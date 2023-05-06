@@ -35,46 +35,14 @@ async function main(interaction) {
                 ),
         ],
         ephemeral: true,
-    }).catch(async () => {
-        await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setColor(process.env.COLOUR)
-                    .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O3\` — **__dms__ *!***
-> is it okay to dm you?`)],
-            components: [
-                new ActionRowBuilder()
-                    .addComponents(
-                        new StringSelectMenuBuilder()
-                            .setCustomId('dms')
-                            .setPlaceholder('Select a dm role')
-                            .addOptions(
-                                {
-                                    label: 'okay to dm',
-                                    value: 'otd',
-                                    emoji: '✅',
-                                },
-                                {
-                                    label: 'ask to dm',
-                                    value: 'atd',
-                                    emoji: '‼️',
-                                },
-                                {
-                                    label: 'don\'t dm',
-                                    value: 'dm',
-                                    emoji: '❌',
-                                },
-                            ),
-                    ),
-            ],
-            ephemeral: true,
-        });
     });
-    await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && i.customId === 'dms', componentType: ComponentType.StringSelect })
+    await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && i.customId === 'dms', componentType: ComponentType.StringSelect, time: 60000 })
         .then(async () => {
             await interaction.deleteReply().catch(() => { return; });
             // return step1_5.execute(interaction);
+        })
+        .catch(async () => {
+            await interaction.deleteReply().catch(() => { return; });
         });
 }
 

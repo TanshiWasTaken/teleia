@@ -1,9 +1,8 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType } = require('discord.js');
-const pronouns_roles = ['1094025640992325654', '1094025628732362783', '1094025652262424636'];
+const pronouns_roles = ['1094025640992325654', '1094025628732362783', '1094025652262424636', '1094025675389816852', '1096913307908186142', '1094025686114644118'];
 const age_roles = ['1094025696701071441', '1094025714350690328', '1094025725037772831'];
 const ping_roles = ['1094025735422873680', '1094025745778614324', '1094025757254221994'];
 const dm_roles = ['1094025769442869378', '1094025780285161483', '1094047480892629002'];
-const step2_0 = require('./step2_0');
 
 async function main(interaction) {
     const prns_r = [];
@@ -43,13 +42,16 @@ async function main(interaction) {
         ],
         ephemeral: true,
     });
-    await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && (i.customId == 'retry_verification1' || i.customId == 'verification2'), componentType: ComponentType.Button })
+    await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && (i.customId == 'retry_verification1' || i.customId == 'verification1-2'), componentType: ComponentType.Button, time: 60000 })
         .then(async (collected) => {
             await interaction.deleteReply().catch(() => { return; });
             if (collected.customId !== 'verification1-2') {
-                await collected.deferReply({ ephemeral: true });
+                await collected.deferReply({ ephemeral: true }).catch(() => { return; });
                 return interaction.client.emit('interactionCreate', collected);
             }
+        })
+        .catch(async () => {
+            await interaction.deleteReply().catch(() => { return; });
         });
 }
 
@@ -58,8 +60,7 @@ module.exports = {
     once: false,
     async execute(interaction) {
         if (interaction.customId == 'verification1') {
-            interaction.customId = 'verification1-2';
-            return await step2_0.execute(interaction);
+            await main(interaction);
         }
         if (interaction.customId !== 'dms' || !interaction.isStringSelectMenu()) return;
         await interaction.member.roles.add(`${interaction.values[0] == 'otd' ? '1094025769442869378' : interaction.values[0] == 'atd' ? '1094025780285161483' : '1094047480892629002'}`);
