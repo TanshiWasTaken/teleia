@@ -5,7 +5,7 @@ module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (interaction.customId !== 'tickets_archive') return;
+        if (interaction.customId !== 'tickets_save') return;
         const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
         if (!ticket) return;
         if (!ticket.saved) {
