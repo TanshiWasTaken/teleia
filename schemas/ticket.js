@@ -14,6 +14,7 @@ const ticketSchema = new Schema({
     summary: { type: String, required: false },
     claimedBy: { type: String, required: false },
     handledBy: { type: Array, required: false },
+    users: { type: Array, required: false },
     closedBy: { type: String, required: false },
     notes: { type: Array, required: false },
 });
