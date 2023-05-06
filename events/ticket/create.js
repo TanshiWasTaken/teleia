@@ -9,7 +9,7 @@ module.exports = {
     async execute(interaction) {
         if (interaction.customId !== 'tickets_createModal' || !interaction.isModalSubmit()) return;
         const reason = interaction.components[0].components[0].value;
-        const existing = await Ticket.findOne({ author: interaction.user.id, open: true });
+        const existing = await Ticket.findOne({ author: interaction.user.id, open: true, saved: false });
         if (existing) {
             return await interaction.reply({
                 embeds: [
@@ -55,6 +55,7 @@ module.exports = {
             ],
             ephemeral: true,
         });
+        await channel.send({ content: '<@&1094017845781868564> <@&1094017816941821994>' }).then(m => m.delete().catch(() => { return; }));
         await channel.send({
             embeds: [
                 new EmbedBuilder()
@@ -65,7 +66,7 @@ ${ticket.category == 'support' ?
 > while waiting for a staff member's response, please describe your issue in as much detail as possible. this will help us resolve your issue faster.`
         : ticket.category == 'connections' ?
             `✰ \`O1\` — **__connect with us__ *!***
-> while waiting for a staff member's response, please send your server ad and make sure your server fits the requirements in ⁠・info. this will make the process faster.`
+> while waiting for a staff member's response, please send your server ad and make sure your server fits the requirements in ${interaction.guild.channels.cache.find(c => c.id == '1092208203267321976')}. this will make the process faster.`
             : ticket.category == 'report' ?
                 `✰ \`O1\` — **__report something__ *!***
 > while waiting for a staff member's response, please provide evidence and information regarding what you are reporting. this will help us take action more efficiently.`
@@ -119,5 +120,18 @@ ${ticket.category == 'support' ?
         stats.nTickets++;
         ticket.category == 'support' ? stats.nSupport++ : ticket.category == 'connections' ? stats.nConnections++ : ticket.category == 'report' ? stats.nReport++ : ticket.category == 'appeal' ? stats.nAppeal++ : stats.nVerify++;
         await stats.save();
+        const audit = await interaction.guild.channels.cache.find(c => c.id === '1092602285286232095');
+        return await audit.send({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(process.env.COLOUR)
+                    .setDescription(`⸝⸝ ★ __***\`TICKET CREATED\`***__ ***!*** . . .\n
+✰ \`O1\` — **__a ticket was created__ *!***
+> ・**ticket:** ${interaction.guild.channels.cache.find(c => c.id == ticket.channel)} (\`${ticket.id}\`)
+> ・**category:** ${ticket.category}
+> ・**opened by:** ${interaction.user}
+> ・**reason:** \`\`${ticket.reason}\`\``),
+            ],
+        });
     },
 };
