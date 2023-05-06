@@ -5,11 +5,11 @@ module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (interaction.customId !== 'tickets_save') return;
+        if (interaction.customId !== 'tickets_archive') return;
         const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
         if (!ticket) return;
-        if (!ticket.locked) {
-            ticket.locked = true;
+        if (!ticket.saved) {
+            ticket.saved = true;
             await ticket.save();
             // await interaction.deferReply().then(async () => { await interaction.deleteReply().catch(() => { return; }); }).catch(() => { return; });
             await interaction.channel.permissionOverwrites.edit(await interaction.guild.members.cache.find(m => m.id == ticket.author), { ViewChannel: null });
@@ -17,7 +17,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(process.env.COLOUR)
-                        .setDescription(`this ticket has been **closed & kept** by ${interaction.user}\nthis ticket won't be visible to the person that opened it until it gets opened again`),
+                        .setDescription(`this ticket has been **saved** by ${interaction.user}\nthis ticket won't be visible to the person that opened it until it gets opened again`),
                 ],
                 components: [
                     new ActionRowBuilder()
@@ -36,8 +36,8 @@ module.exports = {
                 ],
             });
         }
-        else if (ticket.locked) {
-            ticket.locked = false;
+        else if (ticket.saved) {
+            ticket.saved = false;
             await ticket.save();
             await interaction.channel.permissionOverwrites.edit(await interaction.guild.members.cache.find(m => m.id == ticket.author), { ViewChannel: true });
             await interaction.channel.send({
