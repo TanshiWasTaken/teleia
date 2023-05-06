@@ -1,11 +1,130 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const Ticket = require('../../schemas/ticket');
 
 module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (interaction.customId !== 'tickets_staffPanel') return;
+        if (!['tickets_staffPanel', 'tickets_staffPanel_select'].includes(interaction.customId)) return;
+        const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
+        const pages = [
+            ticket.pinned ? new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_pin')
+                        .setLabel('unpin')
+                        .setStyle(ButtonStyle.Success)
+                        .setEmoji('📌'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_save')
+                        .setLabel(ticket.saved ? 'open' : 'save')
+                        .setStyle(ticket.saved ? ButtonStyle.Success : ButtonStyle.Primary)
+                        .setEmoji(ticket.saved ? '🔓' : '💾'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_claim')
+                        .setLabel(`${ticket.claimedBy == interaction.user.id ? 'unclaim' : 'claim'}`)
+                        .setDisabled(ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🙋'),
+                ) : new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_save')
+                        .setLabel(ticket.saved ? 'open' : 'save')
+                        .setStyle(ticket.saved ? ButtonStyle.Success : ButtonStyle.Primary)
+                        .setEmoji(ticket.saved ? '🔓' : '💾'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_close')
+                        .setLabel('close')
+                        .setStyle(ButtonStyle.Danger)
+                        .setEmoji('🔒'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_claim')
+                        .setLabel(`${ticket.claimedBy == interaction.user.id ? 'unclaim' : 'claim'}`)
+                        .setDisabled(ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🙋'),
+                ),
+            ticket.pinned ? new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_userInfo')
+                        .setLabel('user info')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🪪'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_notes')
+                        .setLabel('notes')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('📝'),
+                ) : new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_pin')
+                        .setLabel('pin')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('📌'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_userInfo')
+                        .setLabel('user info')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🪪'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_notes')
+                        .setLabel('notes')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('📝'),
+                ),
+        ];
+        if (ticket.saved && ticket.pinned) {
+            pages[0] = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_pin')
+                        .setLabel('unpin')
+                        .setStyle(ButtonStyle.Success)
+                        .setEmoji('📌'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_save')
+                        .setLabel('open')
+                        .setStyle(ButtonStyle.Success)
+                        .setEmoji('🔓'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_claim')
+                        .setLabel(`${ticket.claimedBy == interaction.user.id ? 'unclaim' : 'claim'}`)
+                        .setDisabled(ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🙋'),
+                );
+            pages[1] = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('tickets_userInfo')
+                        .setLabel('user info')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🪪'),
+                    new ButtonBuilder()
+                        .setCustomId('tickets_notes')
+                        .setLabel('notes')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('📝'),
+                );
+        }
+        const paginator = new ActionRowBuilder()
+            .addComponents(
+                new StringSelectMenuBuilder()
+                    .setCustomId('tickets_staffPanel_select')
+                    .addOptions(
+                        new StringSelectMenuOptionBuilder()
+                            .setLabel('page 1')
+                            .setValue('1')
+                            .setDefault(interaction.values && interaction.values[0] == '1' ? true : false),
+                        new StringSelectMenuOptionBuilder()
+                            .setLabel('page 2')
+                            .setValue('2')
+                            .setDefault(interaction.values && interaction.values[0] == '2' ? true : false),
+                    ),
+            );
         if (!interaction.member.roles.cache.find(r => ['1094017816941821994', '1094017845781868564'].includes(r.id)) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
             return await interaction.reply({
                 embeds: [
@@ -16,7 +135,6 @@ module.exports = {
                 ephemeral: true,
             });
         }
-        const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
         if (!ticket.handledBy.includes(interaction.user.id) && interaction.user.id !== ticket.author) {
             return await interaction.reply({
                 embeds: [
@@ -37,6 +155,51 @@ module.exports = {
                 ephemeral: true,
             });
         }
+        if (interaction.customId === 'tickets_staffPanel_select') {
+            switch (interaction.values[0]) {
+            case '1': {
+                await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(process.env.COLOUR)
+                            .setDescription(`⸝⸝ ★ __***\`STAFF PANEL\`***__ ***!*** . . .\n
+✰ \`O1\` — **__what would you like to do__ *?***
+> this is the staff panel for tickets, you can manage this ticket using the buttons below`),
+                    ],
+                    components: [
+                        pages[0],
+                        paginator,
+                    ],
+                    ephemeral: true,
+                });
+                break;
+            }
+            case '2': {
+                await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(process.env.COLOUR)
+                            .setDescription(`⸝⸝ ★ __***\`STAFF PANEL\`***__ ***!*** . . .\n
+✰ \`O1\` — **__what would you like to do__ *?***
+> this is the staff panel for tickets, you can manage this ticket using the buttons below`),
+                    ],
+                    components: [
+                        pages[1],
+                        paginator,
+                    ],
+                    ephemeral: true,
+                });
+                break;
+            }
+            }
+            return await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes'].includes(i.customId), time: 60000 })
+                .then(async () => {
+                    await interaction.deleteReply().catch(() => { return; });
+                })
+                .catch(async () => {
+                    await interaction.deleteReply().catch(() => { return; });
+                });
+        }
         await interaction.reply({
             embeds: [
                 new EmbedBuilder()
@@ -46,57 +209,25 @@ module.exports = {
 > this is the staff panel for tickets, you can manage this ticket using the buttons below`),
             ],
             components: [
-                ticket.sticky ? new ActionRowBuilder()
+                pages[0],
+                new ActionRowBuilder()
                     .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('tickets_sticky')
-                            .setLabel('unmark as sticky')
-                            .setStyle(ButtonStyle.Success)
-                            .setEmoji('🗃️'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_claim')
-                            .setLabel(`${ticket.claimedBy == interaction.user.id ? 'unclaim' : 'claim'} ticket`)
-                            .setDisabled(ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)
-                            .setStyle(ButtonStyle.Secondary)
-                            .setEmoji('🙋'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_userInfo')
-                            .setLabel('user info')
-                            .setStyle(ButtonStyle.Secondary)
-                            .setEmoji('🪪'),
-                    ) : new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('tickets_save')
-                            .setLabel(ticket.locked ? 'open ticket' : 'close & keep')
-                            .setStyle(ticket.locked ? ButtonStyle.Success : ButtonStyle.Primary)
-                            .setEmoji(ticket.locked ? '🔓' : '💾'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_close')
-                            .setLabel('close ticket')
-                            .setStyle(ButtonStyle.Danger)
-                            .setEmoji('🔒'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_claim')
-                            .setLabel(`${ticket.claimedBy == interaction.user.id ? 'unclaim' : 'claim'} ticket`)
-                            .setDisabled(ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)
-                            .setStyle(ButtonStyle.Secondary)
-                            .setEmoji('🙋'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_sticky')
-                            .setLabel('mark as sticky')
-                            .setStyle(ButtonStyle.Secondary)
-                            .setEmoji('🗃️'),
-                        new ButtonBuilder()
-                            .setCustomId('tickets_userInfo')
-                            .setLabel('user info')
-                            .setStyle(ButtonStyle.Secondary)
-                            .setEmoji('🪪'),
+                        new StringSelectMenuBuilder()
+                            .setCustomId('tickets_staffPanel_select')
+                            .addOptions(
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('page 1')
+                                    .setValue('1')
+                                    .setDefault(true),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('page 2')
+                                    .setValue('2'),
+                            ),
                     ),
             ],
             ephemeral: true,
         });
-        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_sticky', 'tickets_userInfo', 'tickets_staffPanel'].includes(i.customId), time: 60000 })
+        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id === interaction.user.id && ['tickets_save', 'tickets_close', 'tickets_claim', 'tickets_pin', 'tickets_userInfo', 'tickets_staffPanel', 'tickets_staffPanel_select', 'tickets_notes'].includes(i.customId), time: 60000 })
             .then(async () => {
                 await interaction.deleteReply().catch(() => { return; });
             })
