@@ -5,7 +5,7 @@ const ticketSchema = new Schema({
     _id: Schema.Types.ObjectId,
     id: { type: String, required: true },
     category: { type: String, required: true },
-    reason: { type: String, required: true },
+    reason: { type: String, required: false },
     author: { type: String, required: true },
     channel: { type: String, required: false },
     open: { type: Boolean, required: true },
