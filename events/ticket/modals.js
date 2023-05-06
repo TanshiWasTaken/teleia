@@ -6,7 +6,7 @@ module.exports = {
     once: false,
     async execute(interaction) {
         switch (interaction.customId) {
-        case 'tickets_support' || 'tickets_connections' || 'tickets_report' || 'tickets_appeal': {
+        case 'tickets_support': case 'tickets_connections': case 'tickets_report': case 'tickets_appeal': {
             return await interaction.showModal(
                 new ModalBuilder()
                     .setTitle('ticket')
@@ -38,12 +38,23 @@ module.exports = {
                 });
             }
             const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
-            if (ticket.sticky) {
+            if (!ticket) return;
+            if (!ticket.open) {
                 return await interaction.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(process.env.WARNING_COLOUR)
-                            .setDescription('you cannot close a sticky ticket'),
+                            .setDescription('this ticket is already closing'),
+                    ],
+                    ephemeral: true,
+                });
+            }
+            if (ticket.pinned) {
+                return await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(process.env.WARNING_COLOUR)
+                            .setDescription('you cannot close a pinned ticket'),
                     ],
                     ephemeral: true,
                 });
@@ -58,16 +69,6 @@ module.exports = {
                     ephemeral: true,
                 });
             }
-            if (!ticket.open) {
-                return await interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(process.env.WARNING_COLOUR)
-                            .setDescription('this ticket is already closing'),
-                    ],
-                    ephemeral: true,
-                });
-            }
             return await interaction.showModal(
                 new ModalBuilder()
                     .setTitle('close ticket')
@@ -77,12 +78,32 @@ module.exports = {
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                    .setCustomId('tickets-closeReason')
+                                    .setCustomId('tickets_closeModal_input')
                                     .setLabel('reason')
                                     .setRequired(true)
                                     .setPlaceholder('provide a reason for closing the ticket')
                                     .setMinLength(10)
                                     .setMaxLength(100)
+                                    .setStyle(TextInputStyle.Paragraph),
+                            ),
+                    ),
+            );
+        }
+        case 'tickets_notes_add': {
+            const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
+            if (!ticket) return;
+            return await interaction.showModal(
+                new ModalBuilder()
+                    .setTitle('add note')
+                    .setCustomId('tickets_notes_addModal')
+                    .addComponents(
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('tickets_notes_addModal_input')
+                                    .setLabel('note')
+                                    .setRequired(true)
+                                    .setPlaceholder('provide a note')
                                     .setStyle(TextInputStyle.Paragraph),
                             ),
                     ),
