@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require('discord.js');
 const Ticket = require('../../schemas/ticket');
 
 module.exports = {
@@ -17,22 +17,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(process.env.COLOUR)
-                        .setDescription(`this ticket has been **saved** by ${interaction.user}\nthis ticket won't be visible to the person that opened it until it gets opened again`),
-                ],
-                components: [
-                    new ActionRowBuilder()
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('tickets_close')
-                                .setLabel('close ticket')
-                                .setStyle(ButtonStyle.Danger)
-                                .setEmoji('🔒'),
-                            new ButtonBuilder()
-                                .setCustomId('tickets_staffPanel')
-                                .setLabel('staff panel')
-                                .setStyle(ButtonStyle.Secondary)
-                                .setEmoji('🛠️'),
-                        ),
+                        .setDescription(`this ticket has been **saved** by ${interaction.user}. this ticket won't be visible to the person that opened it until it gets opened again`),
                 ],
             });
         }
@@ -44,9 +29,34 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(process.env.COLOUR)
-                        .setDescription(`this ticket has been **opened** again by ${interaction.user}`),
+                        .setDescription(`this ticket has been **reopened** by ${interaction.user}`),
                 ],
             });
         }
+        await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(process.env.COLOUR)
+                    .setDescription(`you have **${ticket.saved ? 'saved' : 'reopened'}** this ticket. ${ticket.saved ? 'this ticket won\'t be visible to the person that opened it until it gets opened again' : ''}`),
+            ],
+            components: [
+                new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('tickets_staffPanel')
+                            .setLabel('staff panel')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji('🛠️'),
+                    ),
+            ],
+            ephemeral: true,
+        });
+        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id == interaction.user.id && i.customId == 'tickets_staffPanel', componentType: ComponentType.Button, time: 60000 })
+            .then(async () => {
+                await interaction.deleteReply().catch(() => { return; });
+            })
+            .catch(async () => {
+                await interaction.deleteReply().catch(() => { return; });
+            });
     },
 };

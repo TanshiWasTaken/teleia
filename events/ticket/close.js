@@ -38,6 +38,24 @@ async function close(ticket, interaction, audit) {
         ],
     });
     await interaction.channel.delete().catch(() => { return; });
+    let welcomeMessage;
+    if (interaction.guild.members.cache.find(m => m.id == ticket.author).roles.cache.has('1094017909879230545')) {
+        welcomeMessage = await interaction.guild.channels.cache.find(c => c.id == '1092208484600262686').send({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(process.env.COLOUR)
+                    .setDescription(`⸝⸝ ★ __***\`NEW USER JOINED\`***__ ***!*** . . .\n
+✰ \`O1\` — **__<@&1096562162379534467>, <@${ticket.author}>__ *!***
+> ・introduce yourself in <#1092208309517418626>
+> ・grab some optional <#1092208297748217896>
+> ・set your birthday by running \`/bday set\` in <#1092213066722201660>
+
+✰ \`O2\` — **__need help__ *?***
+> go to the <#1092208211714637864> channel to open a ticket`),
+            ],
+        });
+        welcomeMessage.react('❤️');
+    }
     await interaction.guild.members.cache.find(m => m.id == ticket.author).send({
         embeds: [
             new EmbedBuilder()
@@ -48,8 +66,9 @@ async function close(ticket, interaction, audit) {
 > ・**handled by:** ${ticket.handledBy.map(m => `<@${m}>`).join(', ') || 'nobody'}
 > ・**closed by:** ${interaction.guild.members.cache.find(m => m.id == ticket.closedBy)}
 > ・**summary:** \`${ticket.summary}\`
-
-✰ \`O2\` — **__how was your experience__ *?***
+${interaction.guild.members.cache.find(m => m.id == ticket.author).roles.cache.has('1094017909879230545') ? `\n✰ \`O2\` — **__welcome to our community__ *!***
+> go check your welcome message in the main chat [here](${welcomeMessage.url})\n` : ''}
+✰ \`O3\` — **__how was your experience__ *?***
 > you can leave an anonymous rating of your experience to help improve our support service! this rating will only be shown in charts, and will not be linked to your name.`),
         ],
         components: [

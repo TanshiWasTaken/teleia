@@ -21,8 +21,8 @@ module.exports = {
                 new EmbedBuilder()
                     .setColor(process.env.COLOUR)
                     .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O6\` — **__open a ticket__ *!***
-> open a ticket to get manually verified by a staff member. in the ticket you will be needed to answer a short series of questions.`),
+✰ \`O1\` — **__open a ticket__ *!***
+> open a ticket to get manually verified by a staff member. in the ticket, you will be asked some additional questions.`),
             ],
             components: [
                 new ActionRowBuilder()

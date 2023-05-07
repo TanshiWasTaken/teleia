@@ -7,7 +7,16 @@ module.exports = {
     async execute(interaction) {
         if (!['tickets_staffPanel', 'tickets_staffPanel_select'].includes(interaction.customId)) return;
         const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
-        if (!ticket) return;
+        if (!ticket) {
+            return await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(process.env.WARNING_COLOUR)
+                        .setDescription('you cannot access the staff panel for tickets in this channel'),
+                ],
+                ephemeral: true,
+            });
+        }
         const pages = [
             new ActionRowBuilder()
                 .addComponents(
@@ -26,7 +35,7 @@ module.exports = {
                         .setLabel('close')
                         .setStyle(ButtonStyle.Danger)
                         .setEmoji('🔒')
-                        .setDisabled(ticket.saved !== undefined && ticket.saved == true),
+                        .setDisabled((ticket.saved !== undefined && ticket.saved == true) || (ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id)),
                 ),
             new ActionRowBuilder()
                 .addComponents(

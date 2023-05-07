@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 const Ticket = require('../../schemas/ticket');
 
 module.exports = {
@@ -17,12 +17,36 @@ module.exports = {
         await member.roles.add(membersRole);
         await member.roles.remove(unverifiedRole);
         await member.roles.add(dividerRoles);
-        await interaction.reply({
+        await interaction.channel.send({
             embeds: [
                 new EmbedBuilder()
                     .setColor(process.env.COLOUR)
                     .setDescription(`${interaction.user} has verified ${member}`),
             ],
         });
+        await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(process.env.COLOUR)
+                    .setDescription(`you have verified ${member}`),
+            ],
+            components: [
+                new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('tickets_staffPanel')
+                            .setLabel('staff panel')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji('🛠️'),
+                    ),
+            ],
+        });
+        await interaction.channel.awaitMessageComponent({ filter: i => i.user.id == interaction.user.id && i.customId == 'tickets_staffPanel', componentType: ComponentType.Button, time: 60000 })
+            .then(async () => {
+                await interaction.deleteReply().catch(() => { return; });
+            })
+            .catch(async () => {
+                await interaction.deleteReply().catch(() => { return; });
+            });
     },
 };

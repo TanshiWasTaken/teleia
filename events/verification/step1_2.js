@@ -6,8 +6,8 @@ async function main(interaction) {
         embeds: [
             new EmbedBuilder()
                 .setColor(process.env.COLOUR)
-                .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O2\` — **__pronouns__ *!***
+                .setDescription(`⸝⸝ ★ __***\`ROLES\`***__ ***!*** . . .\n
+✰ \`O1\` — **__pronouns__ *!***
 > how should we refer to you?`)],
         components: [
             new ActionRowBuilder()

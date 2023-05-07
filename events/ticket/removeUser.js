@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 const Ticket = require('../../schemas/ticket');
 
 module.exports = {
@@ -18,9 +18,34 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(process.env.COLOUR)
-                        .setDescription(`removed user ${interaction.guild.members.cache.find(u => u.id == user)} from this ticket`),
+                        .setDescription(`${interaction.user} removed user ${interaction.guild.members.cache.find(u => u.id == user)} from this ticket`),
                 ],
             });
+            await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(process.env.COLOUR)
+                        .setDescription(`you have **${ticket.saved ? 'saved' : 'reopened'}** this ticket. ${ticket.saved ? 'this ticket won\'t be visible to the person that opened it until it gets opened again' : ''}`),
+                ],
+                components: [
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('tickets_staffPanel')
+                                .setLabel('staff panel')
+                                .setStyle(ButtonStyle.Secondary)
+                                .setEmoji('🛠️'),
+                        ),
+                ],
+                ephemeral: true,
+            });
+            return await interaction.channel.awaitMessageComponent({ filter: i => i.user.id == interaction.user.id && i.customId == 'tickets_staffPanel', componentType: ComponentType.Button, time: 60000 })
+                .then(async () => {
+                    await interaction.deleteReply().catch(() => { return; });
+                })
+                .catch(async () => {
+                    await interaction.deleteReply().catch(() => { return; });
+                });
         }
         await interaction.reply({
             embeds: [

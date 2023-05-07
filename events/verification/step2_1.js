@@ -9,9 +9,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setColor(process.env.COLOUR)
-                    .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O5\` — **__rules__**:
-> please read the following rules carefully. click the 'i agree' button below to confirm you have read and agreed to these rules.
+                    .setDescription(`⸝⸝ ★ __***\`RULES\`***__ ***!*** . . .\n
 ✰ \`O1\` — **__respect__**:
 > you are expected to be respectful within the confines of this server. you will be removed from this space if you are repeatedly disrespectful to others.
 ✰ \`O2\` — **__inclusivity__**:

@@ -46,9 +46,9 @@ async function main(interaction) {
             embeds: [
                 new EmbedBuilder()
                     .setColor(process.env.COLOUR)
-                    .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-    ✰ \`O1\` — **__age__ *!***
-    > how old are you?`),
+                    .setDescription(`⸝⸝ ★ __***\`ROLES\`***__ ***!*** . . .\n
+✰ \`O1\` — **__age__ *!***
+> how old are you?`),
             ],
             components: [
                 new ActionRowBuilder()
@@ -92,26 +92,10 @@ module.exports = {
     once: false,
     async execute(interaction) {
         if (interaction.customId == 'retry_verification1') {
-            for (let i = 0; i < pronouns_roles.length; i++) {
-                if (interaction.member.roles.cache.has(pronouns_roles[i])) {
-                    await interaction.member.roles.remove(pronouns_roles[i]);
-                }
-            }
-            for (let i = 0; i < age_roles.length; i++) {
-                if (interaction.member.roles.cache.has(age_roles[i])) {
-                    await interaction.member.roles.remove(age_roles[i]);
-                }
-            }
-            for (let i = 0; i < ping_roles.length; i++) {
-                if (interaction.member.roles.cache.has(ping_roles[i])) {
-                    await interaction.member.roles.remove(ping_roles[i]);
-                }
-            }
-            for (let i = 0; i < dm_roles.length; i++) {
-                if (interaction.member.roles.cache.has(dm_roles[i])) {
-                    await interaction.member.roles.remove(dm_roles[i]);
-                }
-            }
+            await interaction.member.roles.remove(pronouns_roles);
+            await interaction.member.roles.remove(age_roles);
+            await interaction.member.roles.remove(ping_roles);
+            await interaction.member.roles.remove(dm_roles);
             return await main(interaction);
         }
         if (interaction.customId !== 'verification1' || !interaction.isButton()) return;

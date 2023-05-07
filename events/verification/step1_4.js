@@ -6,8 +6,8 @@ async function main(interaction) {
         embeds: [
             new EmbedBuilder()
                 .setColor(process.env.COLOUR)
-                .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O3\` — **__dms__ *!***
+                .setDescription(`⸝⸝ ★ __***\`ROLES\`***__ ***!*** . . .\n
+✰ \`O1\` — **__dms__ *!***
 > is it okay to dm you?`)],
         components: [
             new ActionRowBuilder()
@@ -28,7 +28,7 @@ async function main(interaction) {
                             },
                             {
                                 label: 'don\'t dm',
-                                value: 'dm',
+                                value: 'ddm',
                                 emoji: '❌',
                             },
                         ),

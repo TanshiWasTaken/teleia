@@ -1,4 +1,4 @@
-const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder } = require('discord.js');
 const Ticket = require('../../schemas/ticket');
 
 module.exports = {
@@ -27,16 +27,6 @@ module.exports = {
             );
         }
         case 'tickets_close': {
-            if (!interaction.member.roles.cache.find(r => ['1094017816941821994', '1094017845781868564'].includes(r.id)) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-                return await interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(process.env.WARNING_COLOUR)
-                            .setDescription('you do not have permission to close tickets'),
-                    ],
-                    ephemeral: true,
-                });
-            }
             const ticket = await Ticket.findOne({ channel: interaction.channel.id, open: true });
             if (!ticket) return;
             if (!ticket.open) {
@@ -45,26 +35,6 @@ module.exports = {
                         new EmbedBuilder()
                             .setColor(process.env.WARNING_COLOUR)
                             .setDescription('this ticket is already closing'),
-                    ],
-                    ephemeral: true,
-                });
-            }
-            if (ticket.pinned) {
-                return await interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(process.env.WARNING_COLOUR)
-                            .setDescription('you cannot close a pinned ticket'),
-                    ],
-                    ephemeral: true,
-                });
-            }
-            if (ticket.claimedBy !== undefined && ticket.claimedBy !== interaction.user.id) {
-                return await interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(process.env.WARNING_COLOUR)
-                            .setDescription(`this ticket has been claimed by ${interaction.guild.members.cache.get(ticket.claimedBy).user}. only they can close this ticket`),
                     ],
                     ephemeral: true,
                 });

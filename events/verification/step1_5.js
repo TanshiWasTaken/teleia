@@ -18,8 +18,8 @@ async function main(interaction) {
         embeds: [
             new EmbedBuilder()
                 .setColor(process.env.COLOUR)
-                .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O4\` — **__are these roles correct__ *?***
+                .setDescription(`⸝⸝ ★ __***\`ROLES\`***__ ***!*** . . .\n
+✰ \`O1\` — **__are these roles correct__ *?***
 > pronouns: ${prns_r.length == 1 ? `<@&${prns_r[0]}>` : prns_r.map(r => `<@&${r}>`).join(', ')}
 > age: <@&${age_r}>
 > ping: <@&${ping_r}>

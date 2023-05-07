@@ -9,8 +9,8 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setColor(process.env.COLOUR)
-                    .setDescription(`⸝⸝ ★ __***\`VERIFY - DNI LIST\`***__ ***!*** . . .\n
-✰ \`O4\` — **__are you or do you support any of these people__ *?***
+                    .setDescription(`⸝⸝ ★ __***\`DNI LIST\`***__ ***!*** . . .\n
+✰ \`O1\` — **__before we continue, please make sure you do not fit into the following__ *:***
 > ・those who discriminate against, mock, judge, or objectify others based on attributes of their character.¹
 > ・those who romanticize or glorify things that should not be romanticized or glorified.²
 > ・those who fetishize or sexualize things that should not be fetishized or sexualized.³
@@ -21,15 +21,14 @@ module.exports = {
 
 ¹color, ethnicity, religion, sexuality, gender identity, etc.
 ²stalking, pedophilia, zoophilia, incest, illnesses, disorders, self-harm, suicide, etc.
-³lgbtq+ individuals, minors, animals, as well as the above. 
-`),
+³lgbtq+ individuals, minors, animals, as well as the above.`),
             ],
             components: [
                 new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('verification2')
-                            .setLabel('no, continue')
+                            .setLabel('i am not on this list')
                             .setStyle(ButtonStyle.Primary)
                             .setEmoji('➡️'),
                     ),

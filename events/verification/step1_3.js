@@ -6,8 +6,8 @@ async function main(interaction) {
         embeds: [
             new EmbedBuilder()
                 .setColor(process.env.COLOUR)
-                .setDescription(`⸝⸝ ★ __***\`VERIFY\`***__ ***!*** . . .\n
-✰ \`O3\` — **__pings__ *!***
+                .setDescription(`⸝⸝ ★ __***\`ROLES\`***__ ***!*** . . .\n
+✰ \`O1\` — **__pings__ *!***
 > is it okay to ping you?`)],
         components: [
             new ActionRowBuilder()
