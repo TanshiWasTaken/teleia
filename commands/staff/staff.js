@@ -633,9 +633,19 @@ module.exports = {
             }
             case 'edit': {
                 const editEmbed = await Embed.findOne({ name: interaction.options.getString('name') });
+                if (!editEmbed) {
+                    return await interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(process.env.WARNING_COLOUR)
+                                .setDescription(`embed \`${interaction.options.getString('name')}\` not found`),
+                        ],
+                        ephemeral: true,
+                    });
+                }
                 editEmbed.thumbnail ? embed.setThumbnail(editEmbed.thumbnail) : 0;
                 editEmbed.image ? embed.setImage(editEmbed.image) : 0;
-                if (!editEmbed) return await interaction.reply({ embeds: [embed.setDescription(`Embed \`${interaction.options.getString('name')}\` not found`)] });
+                if (!editEmbed) return await interaction.reply({ embeds: [embed.setDescription(`embed \`${interaction.options.getString('name')}\` not found`)] });
                 await interaction.reply({
                     embeds: [embed.setDescription(editEmbed.content)],
                     components: [select, buttons],
